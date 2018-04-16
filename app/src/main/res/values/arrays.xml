@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_med_types">
+        <item>@string/med_type_capsules</item>
+        <item>@string/med_type_tablets</item>
+        <item>@string/med_type_syrup</item>
+        <item>@string/med_type_inhaler</item>
+        <item>@string/med_type_drops</item>
+        <item>@string/med_type_ointment</item>
+        <item>@string/med_type_injection</item>
+        <item>@string/med_type_others</item>
+    </string-array>
+</resources>

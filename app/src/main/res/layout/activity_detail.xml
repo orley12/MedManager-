@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.med_manager.DetailActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/med_name_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="monospace"
+            android:textColor="@color/text_view_first_level_black"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.042"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Penicillin" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:text="@string/date_start"
+            app:layout_constraintStart_toStartOf="@+id/med_name_detail"
+            app:layout_constraintTop_toBottomOf="@+id/med_name_detail" />
+
+        <TextView
+            android:id="@+id/start_date_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@+id/textView14"
+            app:layout_constraintTop_toBottomOf="@+id/med_name_detail"
+            tools:text="may 2" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:text="end:"
+            app:layout_constraintStart_toEndOf="@+id/start_date_detail"
+            app:layout_constraintTop_toTopOf="@+id/start_date_detail" />
+
+        <TextView
+            android:id="@+id/end_date_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@+id/textView16"
+            app:layout_constraintTop_toTopOf="@+id/start_date_detail"
+            tools:text="may 17" />
+
+
+        <ImageView
+            android:id="@+id/med_type_image_detail"
+            android:layout_width="500dp"
+            android:layout_height="215dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/start_date_detail"
+            tools:background="#000000" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:text="Med Name"
+            android:textColor="@color/text_view_first_level_black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.023"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/med_type_image_detail" />
+
+        <TextView
+            android:id="@+id/med_name_small_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView18"
+            app:layout_constraintTop_toTopOf="@+id/textView18"
+            tools:text="Penicillin" />
+
+        <TextView
+            android:id="@+id/textView20"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="20dp"
+            android:text="Med Type"
+            android:textColor="@color/text_view_first_level_black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView18"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/med_name_small_detail"
+            app:layout_constraintTop_toTopOf="@+id/med_name_small_detail" />
+
+        <TextView
+            android:id="@+id/med_type_text_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Capsules"
+            app:layout_constraintEnd_toEndOf="@+id/med_name_small_detail"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/textView20"
+            app:layout_constraintTop_toBottomOf="@+id/med_name_small_detail" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="wrap_content"
+            android:layout_height="23dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Med Description"
+            android:textColor="@color/text_view_first_level_black"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/textView18"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/med_type_text_detail"
+            app:layout_constraintTop_toBottomOf="@+id/med_type_text_detail" />
+
+        <TextView
+            android:id="@+id/med_description_detail"
+            android:layout_width="384dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/textView22"
+            app:layout_constraintTop_toBottomOf="@+id/textView22"
+            tools:text="jejihnbijjjejsihijsijejojojaohohaojaojoahojaaojiojaohojaohajaljou
+                        ughehwihjekjdihsisjsjidhojdljdhjodojdjoshojljodojasjojajojhjsjsh" />
+
+        <TextView
+            android:id="@+id/textView24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Dosage"
+            android:textColor="@color/text_view_first_level_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/med_description_detail"
+            app:layout_constraintTop_toBottomOf="@+id/med_description_detail" />
+
+        <TextView
+            android:id="@+id/med_dosage_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4"
+            app:layout_constraintStart_toStartOf="@+id/textView24"
+            app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+        <TextView
+            android:id="@+id/med_interval"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Interval"
+            android:textColor="@color/text_view_first_level_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/med_dosage_detail"
+            app:layout_constraintTop_toBottomOf="@+id/med_dosage_detail" />
+
+        <TextView
+            android:id="@+id/textView29"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time :"
+            app:layout_constraintStart_toStartOf="@+id/med_interval"
+            app:layout_constraintTop_toBottomOf="@+id/med_interval" />
+
+        <TextView
+            android:id="@+id/med_interval_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@+id/textView29"
+            app:layout_constraintTop_toBottomOf="@+id/med_interval"
+            tools:text=" 8:00pm" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

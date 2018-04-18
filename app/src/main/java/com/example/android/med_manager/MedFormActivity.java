@@ -24,12 +24,14 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
-import com.example.android.med_manager.sync.ReminderUtilities;
+import com.example.android.med_manager.sync.NotificationScheduler;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+//import com.example.android.med_manager.sync.NotificationScheduler;
 
 
 public class MedFormActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
@@ -50,6 +52,8 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
 
     EditText mEndDateEditText;
 
+    EditText mStartTimeEditText;
+
     Switch mSwitchView;
 
     Uri mCurrentMedUri;
@@ -64,7 +68,7 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         Intent intent = getIntent();
         mCurrentMedUri = intent.getData();
 
-        mMedListAdapter = new MedListAdapter(this);
+//        mMedListAdapter = new MedListAdapter(this, listener, mListener);
 
         mMedNameEditText = findViewById(R.id.med_name);
 
@@ -80,10 +84,12 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
 
         mEndDateEditText = findViewById(R.id.med_end_date);
 
+        mStartTimeEditText = findViewById(R.id.start_time_edit_text);
+
         mSwitchView = findViewById(R.id.switch_interval);
 
         setupSpinner();
-//        lunchTimePickerFragment();
+        lunchTimePickerStartFragment();
         lunchDatePickerStartFragment();
         lunchDatePickerEndFragment();
 
@@ -135,15 +141,15 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         });
     }
 
-//    public void lunchTimePickerFragment() {
-//            mIntervalEditText.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    DialogFragment newTimePickerFragment = new TimePickerFragment();
-//                    newTimePickerFragment.show(getFragmentManager(), "timePicker");
-//                }
-//            });
-//    }
+    public void lunchTimePickerStartFragment() {
+        mStartTimeEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment newDatePickerStartFragment = new TimePickerFragment();
+                newDatePickerStartFragment.show(getFragmentManager(), "timeStartPicker");
+            }
+        });
+    }
 
     public void lunchDatePickerStartFragment() {
         mStartDateEditText.setOnClickListener(new View.OnClickListener() {
@@ -196,14 +202,27 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         String medDescription = mMedDescriptionEditText.getText().toString().trim();
         String medDosage = mDosageEditText.getText().toString().trim();
         String medInterval = mIntervalEditText.getText().toString().trim();
-//        long medIntervalMillSec = convertIntervalToMillSec(medInterval);
+        String medStartTime = mStartTimeEditText.getText().toString().trim();
+        if ( medStartTime.isEmpty()|| medStartTime.length() <= 0 ) {
+            Toast.makeText(this, "Please Enter A Start Time", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        long medStartTimeMillSec = convertTimeToMillSec(medStartTime);
         String medStartDate = mStartDateEditText.getText().toString().trim();
+        if ( medStartDate.isEmpty()|| medStartDate.length() <= 0 ) {
+            Toast.makeText(this, "Please Enter A Start Date", Toast.LENGTH_SHORT).show();
+            return;
+        }
         long medStartMillSec = convertDateToMillSec(medStartDate);
         String medEndDate = mEndDateEditText.getText().toString().trim();
+        if (medEndDate.isEmpty() || medEndDate.length() <= 0){
+            Toast.makeText(this,"Please Enter An End Date",Toast.LENGTH_SHORT).show();
+            return;
+        }
         long medEndMillSec = convertDateToMillSec(medEndDate);
         int defaultForTakenIgnoreAndReminderCount = 0;
 
-        Log.i(TAG, "TimeMillStartDateSec start:" + medStartMillSec + "end: " + medEndMillSec);
+        Log.i(TAG, "TimeMillStartDateSec start:" + medStartMillSec + "   " + medEndMillSec + "  " + medStartTimeMillSec);
 
 
         ContentValues contentValues = new ContentValues();
@@ -214,6 +233,7 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         contentValues.put(MedEntry.MED_COLUMN_INTERVAL, medInterval);
         contentValues.put(MedEntry.MED_COLUMN_START_DATE, medStartMillSec);
         contentValues.put(MedEntry.MED_COLUMN_END_DATE, medEndMillSec);
+        contentValues.put(MedEntry.MED_COLUMN_START_TIME,medStartTimeMillSec);
         contentValues.put(MedEntry.MED_COLUMN_TAKEN_COUNT, defaultForTakenIgnoreAndReminderCount);
         contentValues.put(MedEntry.MED_COLUMN_IGNORE_COUNT, defaultForTakenIgnoreAndReminderCount);
         contentValues.put(MedEntry.MED_COLUMN_REMINDER_COUNT, defaultForTakenIgnoreAndReminderCount);
@@ -227,10 +247,11 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         }
         long idFromReturnedUri = ContentUris.parseId(returnedUri);
         Log.i(TAG, "PASRED URI :" + idFromReturnedUri);
-        ReminderUtilities.getId(MedFormActivity.this, idFromReturnedUri);
+//        ReminderUtilities.getId(MedFormActivity.this, idFromReturnedUri);
+        NotificationScheduler.getId(MedFormActivity.this, idFromReturnedUri);
     }
 
-    public long convertIntervalToMillSec(String medInterval) {
+    public long convertTimeToMillSec(String medInterval) {
         String extractDateSubString = medInterval.substring(0, medInterval.length() - 3);
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
         String dateString = extractDateSubString;
@@ -267,8 +288,26 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         String medDescription = mMedDescriptionEditText.getText().toString().trim();
         String medDosage = mDosageEditText.getText().toString().trim();
         String medInterval = mIntervalEditText.getText().toString().trim();
+        String medStartTime = mStartTimeEditText.getText().toString().trim();
+        if ( medStartTime.isEmpty()|| medStartTime.length() <= 0 ) {
+            Toast.makeText(this, "Please Enter A Start Time", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        long medStartTimeMillSec = convertTimeToMillSec(medStartTime);
+
         String medStartDate = mStartDateEditText.getText().toString().trim();
+        if ( medStartDate.isEmpty()|| medStartDate.length() <= 0 ){
+            Toast.makeText(this,"Please Enter A Start Date",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        long medStartMillSec = convertDateToMillSec(medStartDate);
+
         String medEndDate = mEndDateEditText.getText().toString().trim();
+        if (medEndDate.isEmpty() || medEndDate.length() <= 0){
+            Toast.makeText(this,"Please Enter An End Date",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        long medEndMillSec = convertDateToMillSec(medEndDate);
 
 
         ContentValues contentValues = new ContentValues();
@@ -276,9 +315,10 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         contentValues.put(MedEntry.MED_COLUMN_TYPE, mMedType);
         contentValues.put(MedEntry.MED_COLUMN_DESCRIPTION, medDescription);
         contentValues.put(MedEntry.MED_COLUMN_DOSAGE, Integer.parseInt(medDosage));
+        contentValues.put(MedEntry.MED_COLUMN_START_TIME,medStartTimeMillSec);
         contentValues.put(MedEntry.MED_COLUMN_INTERVAL, medInterval);
-        contentValues.put(MedEntry.MED_COLUMN_START_DATE, medStartDate);
-        contentValues.put(MedEntry.MED_COLUMN_END_DATE, medEndDate);
+        contentValues.put(MedEntry.MED_COLUMN_START_DATE, medStartMillSec);
+        contentValues.put(MedEntry.MED_COLUMN_END_DATE, medEndMillSec);
 
         String selection = MedEntry.MED_DB_DEFAULT_ID + "=?";
         String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(mCurrentMedUri))};
@@ -291,8 +331,8 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
             Toast.makeText(this, "Pets Update Failed", Toast.LENGTH_SHORT).show();
         }
         long idValueOfParseUri = ContentUris.parseId(mCurrentMedUri);
-        ReminderUtilities.cancelSpecifiedJob(MedFormActivity.this, idValueOfParseUri);
-        ReminderUtilities.getId(MedFormActivity.this, idValueOfParseUri);
+//        ReminderUtilities.cancelSpecifiedJob(MedFormActivity.this, idValueOfParseUri);
+//        ReminderUtilities.getId(MedFormActivity.this, idValueOfParseUri);
     }
 
     private void deleteMedInfoFromDb() {
@@ -306,7 +346,7 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
             Toast.makeText(this, "Medication Could Not Deleted", Toast.LENGTH_SHORT).show();
         }
         long idValueOfParseUri = ContentUris.parseId(mCurrentMedUri);
-        ReminderUtilities.cancelSpecifiedJob(MedFormActivity.this, idValueOfParseUri);
+//        ReminderUtilities.cancelSpecifiedJob(MedFormActivity.this, idValueOfParseUri);
         getSupportLoaderManager().restartLoader(102, null, this);
         finish();
     }
@@ -320,6 +360,7 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
                 MedEntry.MED_COLUMN_DESCRIPTION,
                 MedEntry.MED_COLUMN_DOSAGE,
                 MedEntry.MED_COLUMN_INTERVAL,
+                MedEntry.MED_COLUMN_START_TIME,
                 MedEntry.MED_COLUMN_START_DATE,
                 MedEntry.MED_COLUMN_END_DATE
         };
@@ -342,6 +383,7 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
             String interval = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
             String startDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
             String endDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
+            long startTime = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
 
             Log.i(TAG, "onLoadFinished:  HERE!!!" + name + type + description);
             mMedNameEditText.setText(name);
@@ -349,11 +391,36 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
             mMedDescriptionEditText.setText(description);
             mDosageEditText.setText(Integer.toString(dosage));
             mIntervalEditText.setText(interval);
-            mStartDateEditText.setText(startDate);
-            mEndDateEditText.setText(endDate);
+            mStartDateEditText.setText(convertFormMilliSecToDate(startDate));
+            mEndDateEditText.setText(convertFormMilliSecToDate(endDate));
+            String startTimeString = convertFormMilliSecToTime(startTime);
+            int startTimeInt = Integer.parseInt(startTimeString.substring(0,2));
+            if (startTimeInt >= 12) {
+                mStartTimeEditText.setText(convertFormMilliSecToTime(startTime) + " pm");
+            }else {
+                mStartTimeEditText.setText(convertFormMilliSecToTime(startTime) + " am");
+            }
 
         }
         mCursor.close();
+    }
+
+    private String convertFormMilliSecToTime(long date) {
+        long dateValue = date;
+        String dateFormat = "HH:mm";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateValue);
+        return simpleDateFormat.format(calendar.getTime());
+    }
+
+    private String convertFormMilliSecToDate(String date) {
+        long dateValue = Long.parseLong(date);
+        String dateFormat = "dd/MM/yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateValue);
+        return simpleDateFormat.format(calendar.getTime());
     }
 
     @Override

@@ -7,6 +7,9 @@ import android.widget.TextView;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class DetailActivity extends AppCompatActivity {
 
     TextView mMedNameTextView;
@@ -27,6 +30,10 @@ public class DetailActivity extends AppCompatActivity {
 
     TextView mMedTypeTextView;
 
+    TextView mTakenTextView;
+
+    TextView mIgnoreTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +47,8 @@ public class DetailActivity extends AppCompatActivity {
         String interval = bundle.getString("interval");
         String startDate = bundle.getString("startDate");
         String endDate = bundle.getString("endDate");
+        int takenCount = bundle.getInt("takenCount");
+        int ignoreCount = bundle.getInt("ignoreCount");
 
         mMedNameTextView = findViewById(R.id.med_name_detail);
         mMedNameTextView.setText(name);
@@ -54,12 +63,24 @@ public class DetailActivity extends AppCompatActivity {
         mMedIntervalTextView = findViewById(R.id.med_interval_detail);
         mMedIntervalTextView.setText(interval);
         mMedStartDateTextView = findViewById(R.id.start_date_detail);
-        mMedStartDateTextView.setText(startDate);
+        mMedStartDateTextView.setText(convertFormMilliSecToDate(startDate));
         mMedEndDateTextView = findViewById(R.id.end_date_detail);
-        mMedEndDateTextView.setText(endDate);
+        mMedEndDateTextView.setText(convertFormMilliSecToDate(endDate));
         mMedNameSmallTextView = findViewById(R.id.med_name_small_detail);
         mMedNameSmallTextView.setText(name);
+        mTakenTextView = findViewById(R.id.taken_count_text_view);
+        mTakenTextView.setText("You used your medications :" + takenCount + " times.");
+        mIgnoreTextView = findViewById(R.id.ignore_count_text_view);
+        mIgnoreTextView.setText("You ignored use of your medication :" + ignoreCount + " times.");
 
+    }
+    private String convertFormMilliSecToDate(String date) {
+        long dateValue = Long.parseLong(date);
+        String dateFormat = "dd-MM-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateValue);
+        return simpleDateFormat.format(calendar.getTime());
     }
 
     private void getImageForTypeImageView(int type) {

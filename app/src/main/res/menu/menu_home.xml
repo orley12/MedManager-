@@ -15,12 +15,6 @@
     tools:context=".HomeActivity">
 
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_magnifying_glass"
-        android:title="@string/action_search"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/action_profile"
         android:title="@string/action_profile"
         app:showAsAction="never" />
@@ -34,4 +28,11 @@
         android:id="@+id/action_delete_all_meds"
         android:title="@string/action_delete_all_meds"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_search_view"
+        android:title="@string/action_search"
+        app:showAsAction="always"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+
 </menu>

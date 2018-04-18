@@ -35,6 +35,7 @@ public class MedDbHelper extends SQLiteOpenHelper {
             MedEntry.MED_COLUMN_END_DATE + " INTEGER," +
             MedEntry.MED_COLUMN_TAKEN_COUNT + " INTEGER," +
             MedEntry.MED_COLUMN_IGNORE_COUNT + " INTEGER," +
+            MedEntry.MED_COLUMN_START_TIME + " INTEGER," +
             MedEntry.MED_COLUMN_REMINDER_COUNT + " INTEGER" + ")";
     public static final String SQL_DELETE_PROFILE_ENTRIES =
             "DROP TABLE IF EXISTS " + ProfileEntry.PROFILE_TABLE_NAME;
@@ -59,4 +60,5 @@ public class MedDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(SQL_DELETE_MEDICATION_ENTRIES);
         onCreate(sqLiteDatabase);
     }
+
 }

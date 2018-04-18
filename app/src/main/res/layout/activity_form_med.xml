@@ -157,7 +157,7 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="104dp"
         android:text="@string/start_date"
         android:textSize="14dp"
         app:layout_constraintStart_toStartOf="@+id/textView10"
@@ -169,7 +169,7 @@
         android:layout_height="45dp"
         android:layout_marginLeft="32dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="92dp"
         android:background="@color/edit_text_background_color"
         android:editable="false"
         android:ems="10"
@@ -187,7 +187,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="104dp"
         android:text="@string/end_date"
         android:textSize="14dp"
         app:layout_constraintStart_toEndOf="@+id/med_start_date"
@@ -199,7 +199,7 @@
         android:layout_height="45dp"
         android:layout_marginLeft="32dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="92dp"
         android:background="@color/edit_text_background_color"
         android:editable="false"
         android:ems="10"
@@ -208,5 +208,29 @@
         android:paddingLeft="3dp"
         app:layout_constraintStart_toEndOf="@+id/textView12"
         app:layout_constraintTop_toBottomOf="@+id/med_interval" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="42dp"
+        android:text="Start Time"
+        app:layout_constraintStart_toStartOf="@+id/textView10"
+        app:layout_constraintTop_toBottomOf="@+id/switch_interval" />
+
+    <EditText
+        android:id="@+id/start_time_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="25dp"
+        android:ems="10"
+        android:background="@color/edit_text_background_color"
+        android:inputType="none"
+        android:editable="false"
+        android:hint="@string/start_time"
+        app:layout_constraintStart_toEndOf="@+id/textView15"
+        app:layout_constraintTop_toBottomOf="@+id/med_interval"
+        android:layout_marginLeft="76dp" />
 
 </android.support.constraint.ConstraintLayout>

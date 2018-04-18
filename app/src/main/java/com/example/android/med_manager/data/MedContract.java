@@ -48,6 +48,7 @@ public class MedContract {
         public static final String MED_COLUMN_TAKEN_COUNT = "med_taken_count";
         public static final String MED_COLUMN_IGNORE_COUNT = "med_ignore_count";
         public static final String MED_COLUMN_REMINDER_COUNT = "med_reminder_count";
+        public static final String MED_COLUMN_START_TIME = "med_start_time";
         public static final Uri CONTENT_URI = Uri.withAppendedPath(Uri.parse(BASE_CONTENT_URI), MEDICATION_PATH);
 
 

@@ -49,14 +49,14 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     }
 
     public void setTime(String newDateString, int hourOfDay) {
-        EditText intervalEditText = getActivity().findViewById(R.id.med_interval);
+        EditText startTimeEditText = getActivity().findViewById(R.id.start_time_edit_text);
         String timeOfDay;
         if (hourOfDay > 12) {
             timeOfDay = "pm";
         } else {
             timeOfDay = "am";
         }
-        intervalEditText.setText(newDateString + " " + timeOfDay);
+        startTimeEditText.setText(newDateString + " " + timeOfDay);
     }
 
 }

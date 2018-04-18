@@ -3,6 +3,7 @@ package com.example.android.med_manager.utilities;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
 
@@ -11,6 +12,8 @@ import com.example.android.med_manager.data.MedContract.MedEntry;
  */
 
 public class CountUtilities {
+    public static final String TAG="CountUtilities";
+
 
     public static Cursor getTakenCount(Context context, long id) {
         String[] projection = {
@@ -25,11 +28,13 @@ public class CountUtilities {
 
     synchronized public static void incrementTakenCount(Context context, long id) {
         Cursor gottenCursor = CountUtilities.getTakenCount(context, id);
-        int takenCount = 0;
+//        int takenCount = 0;
         if (gottenCursor.moveToFirst()) {
-            takenCount = gottenCursor.getInt(gottenCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TAKEN_COUNT));
+            int takenCount = gottenCursor.getInt(gottenCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TAKEN_COUNT));
+            Log.i(TAG,"TAKEN COUNT :" + id);
+            setTakenCount(context, id, ++takenCount);
         }
-        setTakenCount(context, id, ++takenCount);
+        gottenCursor.close();
     }
 
     synchronized private static void setTakenCount(Context context, long id, int medTaken) {
@@ -54,12 +59,15 @@ public class CountUtilities {
     }
 
     synchronized public static void incrementIgnoreCount(Context context, long id) {
-        Cursor ignoreGottenCount = CountUtilities.getIgnoreCount(context, id);
+        Cursor ignoreGottenCursor = CountUtilities.getIgnoreCount(context, id);
         int ignoreCount = 0;
-        if (ignoreGottenCount.moveToFirst()) {
-            ignoreCount = ignoreGottenCount.getInt(ignoreGottenCount.getColumnIndexOrThrow(MedEntry.MED_COLUMN_IGNORE_COUNT));
+        if (ignoreGottenCursor.moveToFirst()) {
+            ignoreCount = ignoreGottenCursor.getInt(ignoreGottenCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_IGNORE_COUNT));
+            Log.i(TAG,"IGNORE COUNT :" + ignoreCount);
+
         }
         setIgnoreCount(context, id, ++ignoreCount);
+        ignoreGottenCursor.close();
     }
 
     synchronized private static void setIgnoreCount(Context context, long id, int medTaken) {

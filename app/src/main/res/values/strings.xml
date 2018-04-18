@@ -12,9 +12,9 @@
     <string name="interval_hint_text">8</string>
     <string name="dosage_hint_text">2</string>
     <string name="start_date">Start Date</string>
-    <string name="start_date_hint_text">20</string>
+    <string name="start_date_hint_text">12/07/2018</string>
     <string name="end_date">End Date</string>
-    <string name="end_date_hint_text">23</string>
+    <string name="end_date_hint_text">15/07/2018</string>
     <string name="action_profile">profile</string>
     <string name="action_add">Add medication</string>
     <string name="action_delete_all_meds">Delete all medications</string>
@@ -38,4 +38,5 @@
     <string name="med_reminder_notification_title">Time To Use Your Medication</string>
     <string name="med_reminder_notification_body">You are to use :</string>
     <string name="dosage_body">Your dosage is :</string>
+    <string name="start_time">8:00pm</string>
 </resources>

@@ -1,14 +1,16 @@
 package com.example.android.med_manager;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.data.MedContract.ProfileEntry;
@@ -73,45 +75,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         * lunch the HomeActivity as parent activity*/
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null) {
-            getUsersInfo(account);
+            launchHomeActivity();
         }
     }
 
-    /*makes HomeActivity the parent activity*/
     private void getUsersInfo(GoogleSignInAccount account) {
-        String usersEmail = account.getEmail();
-        String usersName = account.getGivenName();
-        String usersFamilyName = account.getFamilyName();
-        String usersId = account.getId();
-        String usersDisplayName = account.getDisplayName();
+        if (account == null){
+            Toast.makeText(this,"No Accout Info Found",Toast.LENGTH_SHORT);
+        }else {
+            String usersEmail = account.getEmail();
+            String usersName = account.getGivenName();
+            String usersFamilyName = account.getFamilyName();
+            String usersId = account.getId();
+            String usersDisplayName = account.getDisplayName();
 
-        Log.i(LOG_TAG, "THE LOGS YOU LOOKING FOR" + usersEmail + usersName + usersFamilyName + usersId + usersDisplayName);
+            Log.i(LOG_TAG, "THE LOGS YOU LOOKING FOR" + usersEmail + usersName + usersFamilyName + usersId + usersDisplayName);
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, "");
-        contentValues.put(ProfileEntry.PROFILE_COLUMN_NAME, "");
-        contentValues.put(ProfileEntry.PROFILE_SURNAME_NAME, "");
-        contentValues.put(ProfileEntry.PROFILE_ID_GOOGLE, "");
-        contentValues.put(ProfileEntry.PROFILE_USER_NAME, "");
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, "");
+            contentValues.put(ProfileEntry.PROFILE_COLUMN_NAME, "");
+            contentValues.put(ProfileEntry.PROFILE_SURNAME_NAME, "");
+            contentValues.put(ProfileEntry.PROFILE_ID_GOOGLE, "");
+            contentValues.put(ProfileEntry.PROFILE_USER_NAME, "");
 
-        getContentResolver().insert(ProfileEntry.CONTENT_URI, contentValues);
-
-        Cursor cursor = getContentResolver().query(ProfileEntry.CONTENT_URI, null, null,
-                null, null);
-        int idIndex = 0;
-        if (cursor != null) {
-            cursor.moveToFirst();
-            idIndex = cursor.getInt(cursor.getColumnIndexOrThrow(ProfileEntry.PROFILE_DB_DEFAULT_ID));
+            Uri returnedUri = getContentResolver().insert(ProfileEntry.CONTENT_URI, contentValues);
+            long idValueOfParseUri = ContentUris.parseId(returnedUri);
+            Log.i(LOG_TAG, "THE ID YOU LOOKING FOR" + idValueOfParseUri);
+            insertValuesIntoDatabase(idValueOfParseUri, usersEmail, usersName, usersFamilyName, usersId, usersDisplayName);
+            launchHomeActivity();
         }
-        insertValuesIntoDatabase(idIndex, usersEmail, usersName, usersFamilyName, usersId, usersDisplayName);
-        launchHomeActivity();
     }
 
-    public void insertValuesIntoDatabase(int idIndex, String email, String givenName, String familyName, String Id
+    public void insertValuesIntoDatabase(long idIndex, String email, String givenName, String familyName, String Id
             , String displayName) {
 
         String selection = MedEntry.MED_DB_DEFAULT_ID + "=?";
-        String[] selectionArgs = new String[]{String.valueOf(Integer.toString(idIndex))};
+        String[] selectionArgs = new String[]{String.valueOf(Long.toString(idIndex))};
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, email);
@@ -158,6 +157,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             getUsersInfo(account);
+            if (account == null){
+            }
         } catch (ApiException e) {
             e.printStackTrace();
             Log.w(LOG_TAG, "sigin failed code = " + e.getStatusCode());

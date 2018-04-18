@@ -15,6 +15,10 @@ import android.widget.TextView;
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.sync.MedReminderIntentService;
 import com.example.android.med_manager.sync.ReminderTasks;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 //import com.example.android.med_manager.sync.ReminderUtilities;
 
 /**
@@ -32,14 +36,9 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
 //    ReminderUtilities mReminderUtilities;
 
     public MedListAdapter(Context context) {
-
         mContext = context;
-
     }
 
-//    public MedListAdapter(ReminderUtilities reminderUtilities) {
-//        mReminderUtilities = reminderUtilities;
-//    }
 
     @Override
     public MedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,28 +52,28 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
 
         mCursor.moveToPosition(position); // get to the right location in the cursor
 
-        final int idIndex = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
+        final long idIndex = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
         String name = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_NAME));
         int type = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TYPE));
         String description = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DESCRIPTION));
         int dosage = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DOSAGE));
         String interval = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
-        int startDate = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
-        int endDate = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
-//        mCursor.close();
+        String startDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
+        String endDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
         holder.itemView.setTag(idIndex);
         Log.i(LOG_TAG, "HERE WE ARE !!!" + name + type + description + dosage + interval + startDate + endDate);
         bindHolder(holder, name, type, description, dosage, interval, startDate, endDate);
 
-        holder.medTakenLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent incrementTakenCountIntent = new Intent(mContext, MedReminderIntentService.class);
-                incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
-                incrementTakenCountIntent.putExtra("id", idIndex);
-                mContext.startService(incrementTakenCountIntent);
-            }
-        });
+//        holder.medTakenLinearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent incrementTakenCountIntent = new Intent(mContext, MedReminderIntentService.class);
+//                incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
+//                incrementTakenCountIntent.putExtra("id", idIndex);
+//                mContext.startService(incrementTakenCountIntent);
+//                Log.i(LOG_TAG, "ALSO CALLED WHAT IS HERE :" + idIndex);
+//            }
+//        });
 
         holder.medIgnoreLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,28 +82,35 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
                 incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_IGNORE_COUNT);
                 incrementTakenCountIntent.putExtra("id", idIndex);
                 mContext.startService(incrementTakenCountIntent);
+                Log.i(LOG_TAG, "CALLED IGNORE WHAT IS HERE :" + position);
             }
         });
     }
 
     private void bindHolder(MedViewHolder holder, String name, int type, String description,
-                            int dosage, String interval, int startDate, int endDate) {
+                            int dosage, String interval, String startDate, String endDate) {
         holder.medNameTextView.setText(name);
         holder.medDosageTextView.setText(Integer.toString(dosage));
-        holder.medStartTextView.setText(Integer.toString(startDate));
-        holder.medEndTextView.setText(Integer.toString(endDate));
+        String startDateSubString = reduceDateLength(convertFormMilliSecToDate(startDate));
+        holder.medStartTextView.setText(startDateSubString);
+        String endDateSubString = reduceDateLength(convertFormMilliSecToDate(endDate));
+        holder.medEndTextView.setText(endDateSubString);
         medTypeImage(holder, type);
     }
+    //        Log.i(LOG_TAG,"LENGTH :" + startDateSubString);
 
-//    private String convertFormMilliSecToDate(int date) {
-//        Calendar calendar = Calendar.getInstance();
-//        calendar.setTimeInMillis(date);
-//        int year = calendar.get(Calendar.YEAR);
-//        int month = calendar.get(Calendar.MONTH);
-//        int day = calendar.get(Calendar.DAY_OF_MONTH);
-//        String dateString = day/month/year+"";
-//        return dateString;
-//    }
+    private String reduceDateLength(String dateValue){
+        return dateValue.substring(0,dateValue.length()-5);
+    }
+
+    private String convertFormMilliSecToDate(String date) {
+        long dateValue = Long.parseLong(date);
+        String dateFormat = "dd-MM-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+         Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(dateValue);
+            return simpleDateFormat.format(calendar.getTime());
+    }
 
     private void medTypeImage(MedViewHolder holder, int type) {
         switch (type) {
@@ -172,6 +178,7 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
         LinearLayout medTakenLinearLayout;
         LinearLayout medIgnoreLinearLayout;
 
+
         public MedViewHolder(View itemView) {
             super(itemView);
 
@@ -182,6 +189,13 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
             medTypeImageView = itemView.findViewById(R.id.med_type_image_card);
             medTakenLinearLayout = itemView.findViewById(R.id.taken_layout_card);
             medIgnoreLinearLayout = itemView.findViewById(R.id.ignore_layout_card);
+
+        }
+    }
+
+    public void filter(String charText) {
+        charText = charText.toLowerCase(Locale.getDefault());
+        if (charText.length() == 0){
 
         }
     }

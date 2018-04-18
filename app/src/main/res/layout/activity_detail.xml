@@ -85,6 +85,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="12dp"
+            android:textStyle="bold"
             android:text="Med Name"
             android:textColor="@color/text_view_first_level_black"
             android:textSize="16sp"
@@ -114,6 +115,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="20dp"
             android:text="Med Type"
+            android:textStyle="bold"
             android:textColor="@color/text_view_first_level_black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/textView18"
@@ -143,6 +145,7 @@
             android:text="Med Description"
             android:textColor="@color/text_view_first_level_black"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/textView18"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/med_type_text_detail"
@@ -154,9 +157,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@+id/textView22"
             app:layout_constraintTop_toBottomOf="@+id/textView22"
-            tools:text="jejihnbijjjejsihijsijejojojaohohaojaojoahojaaojiojaohojaohajaljou
-                        ughehwihjekjdihsisjsjidhojdljdhjodojdjoshojljodojasjojajojhjsjsh" />
-
+            tools:text="jejihnbijjjejsihijsijejojojaohohaojaojoahojaaojiojaohojaohajal"/>
         <TextView
             android:id="@+id/textView24"
             android:layout_width="wrap_content"
@@ -203,6 +204,47 @@
             app:layout_constraintTop_toBottomOf="@+id/med_interval"
             tools:text=" 8:00pm" />
 
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Taken Count"
+            android:textColor="@color/text_view_first_level_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/textView29"
+            app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
+        <TextView
+            android:id="@+id/taken_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/textView13"
+            tools:text="You used your medications :" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="Ignore Count"
+            android:textColor="@color/text_view_first_level_black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/taken_count_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/taken_count_text_view" />
+
+        <TextView
+            android:id="@+id/ignore_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="23dp"
+            app:layout_constraintStart_toStartOf="@+id/textView1"
+            app:layout_constraintTop_toTopOf="@+id/textView1"
+            tools:text="You ignored use of your medication" />
+
     </android.support.constraint.ConstraintLayout>
+
+
 
 </ScrollView>

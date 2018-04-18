@@ -235,7 +235,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 @Override
                 public boolean onQueryTextChange(String newText) {
                     Cursor contacts = getListOfMedNames(newText);
-                    ContactsAdapter cursorAdapter = new ContactsAdapter
+                    SearchAdapter cursorAdapter = new SearchAdapter
                             (HomeActivity.this, contacts,mSearchView );
                     mSearchView.setSuggestionsAdapter(cursorAdapter);
                     return true;

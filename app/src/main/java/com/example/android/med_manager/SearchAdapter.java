@@ -18,7 +18,7 @@ import com.example.android.med_manager.data.MedContract.MedEntry;
  * Created by SOLARIN O. OLUBAYODE on 18/04/18.
  */
 
-public class ContactsAdapter extends CursorAdapter {
+public class SearchAdapter extends CursorAdapter {
 
     private LayoutInflater mLayoutInflater;
         private Context mContext;
@@ -26,7 +26,7 @@ public class ContactsAdapter extends CursorAdapter {
 
         MedListAdapter mMedListAdapter = new MedListAdapter(mContext);
 
-        public ContactsAdapter(Context context, Cursor cursor, SearchView searchView) {
+        public SearchAdapter(Context context, Cursor cursor, SearchView searchView) {
             super(context, cursor, false);
             mContext = context;
             mSearchView = searchView;

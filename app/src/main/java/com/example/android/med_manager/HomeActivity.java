@@ -1,5 +1,6 @@
 package com.example.android.med_manager;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
@@ -9,16 +10,21 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.data.MedDbHelper;
@@ -47,6 +53,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
     FloatingActionButton mFloatingActionButton;
 
+    ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +72,10 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         mMedDbHelper = new MedDbHelper(this);
 
         mFloatingActionButton = findViewById(R.id.fab);
+
+        listView = findViewById(R.id.list_view);
+
+//        mRecyclerView.setVisibility(View.GONE);
 
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +156,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 mMedListAdapter.notifyItemRemoved(position);
             }
         });
-
 }
 
     public Bundle returnBundleForNewActivity(int positionClicked) {
@@ -182,10 +193,80 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
-        final MenuItem searchItem = menu.findItem(R.id.action_search_view);
-//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-//        searchView.setOnQueryTextListener(this);
+        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        mSearchView.setSubmitButtonEnabled(true);
+        mSearchView.setOnQueryTextListener(onQueryTextListener);
         return true;
+    }
+    private SearchView.OnQueryTextListener onQueryTextListener =
+            new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Cursor medData = getListOfMedNames(query);
+                    String[] cursorColumns = {
+                            MedEntry.MED_COLUMN_NAME };
+                    int[] viewIds = {R.id.med_name_card};
+
+                    SimpleCursorAdapter simpleCursorAdapter = new SimpleCursorAdapter(
+                            HomeActivity.this,
+                            R.layout.med_card_view,
+                            medData,
+                            cursorColumns,
+                            viewIds,
+                            0);
+
+                    listView.setAdapter(simpleCursorAdapter);
+                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView,
+                                                View view, int position, long id) {
+                            //get contact details and display
+                            TextView tv = view.findViewById(R.id.med_name_card);
+                            Toast.makeText(HomeActivity.this,
+                                    "Selected Contact "+tv.getText(),
+                                    Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    Cursor contacts = getListOfMedNames(newText);
+                    ContactsAdapter cursorAdapter = new ContactsAdapter
+                            (HomeActivity.this, contacts,mSearchView );
+                    mSearchView.setSuggestionsAdapter(cursorAdapter);
+                    return true;
+                }
+            };
+
+    public Cursor getListOfMedNames(String searchText) {
+
+        Cursor cursor = null;
+        ContentResolver contentResolver = getContentResolver();
+
+        String[] mProjection = {MedEntry.MED_DB_DEFAULT_ID,
+                MedEntry.MED_COLUMN_NAME,
+                MedEntry.MED_COLUMN_DOSAGE,
+                MedEntry.MED_COLUMN_START_DATE,
+                MedEntry.MED_COLUMN_END_DATE,
+                MedEntry.MED_COLUMN_TYPE,
+                MedEntry.MED_COLUMN_DESCRIPTION,
+                MedEntry.MED_COLUMN_INTERVAL,
+                MedEntry.MED_COLUMN_TAKEN_COUNT,
+                MedEntry.MED_COLUMN_IGNORE_COUNT};
+
+        Uri uri = MedEntry.CONTENT_URI;
+
+        String selection = MedEntry.MED_COLUMN_NAME + " LIKE ?";
+        String[] selectionArgs = new String[]{"%"+searchText+"%"};
+
+        cursor = contentResolver.query(uri, mProjection, selection, selectionArgs, null);
+
+        return cursor;
+
     }
 
     @Override
@@ -202,7 +283,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.action_delete_all_meds:
                 deleteAllMedEntries();
                 break;
-            case R.id.action_search_view:
+            case R.id.action_search:
                 removeRecyclerView();
                 break;
         }

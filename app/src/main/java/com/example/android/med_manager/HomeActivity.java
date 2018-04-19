@@ -166,7 +166,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         String endDate = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
         int takenCount = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TAKEN_COUNT));
         int ignoreCount = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_IGNORE_COUNT));
-        int startTime = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
+        long startTime = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
 
 
         Bundle bundle = new Bundle();
@@ -180,7 +180,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         bundle.putString("id", idIndex);
         bundle.putInt("takenCount",takenCount);
         bundle.putInt("ignoreCount",ignoreCount);
-        bundle.putInt("startTime",startTime);
+        bundle.putLong("startTime",startTime);
 
         return bundle;
     }

@@ -60,20 +60,21 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
         String interval = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
         String startDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
         String endDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
+
         holder.itemView.setTag(idIndex);
         Log.i(LOG_TAG, "HERE WE ARE !!!" + name + type + description + dosage + interval + startDate + endDate);
         bindHolder(holder, name, type, description, dosage, interval, startDate, endDate);
 
-//        holder.medTakenLinearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent incrementTakenCountIntent = new Intent(mContext, MedReminderIntentService.class);
-//                incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
-//                incrementTakenCountIntent.putExtra("id", idIndex);
-//                mContext.startService(incrementTakenCountIntent);
-//                Log.i(LOG_TAG, "ALSO CALLED WHAT IS HERE :" + idIndex);
-//            }
-//        });
+        holder.medTakenLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent incrementTakenCountIntent = new Intent(mContext, MedReminderIntentService.class);
+                incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
+                incrementTakenCountIntent.putExtra("id", idIndex);
+                mContext.startService(incrementTakenCountIntent);
+                Log.i(LOG_TAG, "ALSO CALLED WHAT IS HERE :" + idIndex);
+            }
+        });
 
         holder.medIgnoreLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override

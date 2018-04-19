@@ -28,8 +28,6 @@ import android.widget.Toast;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.data.MedDbHelper;
-import com.example.android.med_manager.sync.MedReminderIntentService;
-import com.example.android.med_manager.sync.ReminderTasks;
 
 public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
@@ -128,13 +126,13 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onItemClick(View view, int position) {
                 if (view instanceof LinearLayout) {
-                    Cursor cursor = mMedListAdapter.entireCursorForHomeActivity();
-                    cursor.moveToPosition(position); // get to the right location in the cursor
-                    final long idIndex = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
-                    Intent incrementTakenCountIntent = new Intent(HomeActivity.this, MedReminderIntentService.class);
-                    incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
-                    incrementTakenCountIntent.putExtra("id", idIndex);
-                    HomeActivity.this.startService(incrementTakenCountIntent);
+//                    Cursor cursor = mMedListAdapter.entireCursorForHomeActivity();
+//                    cursor.moveToPosition(position); // get to the right location in the cursor
+//                    long idIndex = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
+//                    Intent incrementTakenCountIntent = new Intent(HomeActivity.this, MedReminderIntentService.class);
+//                    incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
+//                    incrementTakenCountIntent.putExtra("id", idIndex);
+//                    HomeActivity.this.startService(incrementTakenCountIntent);
                 } else {
                         Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
                         Bundle bundle = returnBundleForNewActivity(position);
@@ -164,7 +162,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
         cursor.moveToPosition(positionClicked);
 
-        final int idIndex = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
+        String idIndex = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
         String name = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_NAME));
         int type = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TYPE));
         String description = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DESCRIPTION));
@@ -174,6 +172,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         String endDate = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
         int takenCount = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TAKEN_COUNT));
         int ignoreCount = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_IGNORE_COUNT));
+        int startTime = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
+
 
         Bundle bundle = new Bundle();
         bundle.putString("name", name);
@@ -183,9 +183,10 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         bundle.putString("interval", interval);
         bundle.putString("startDate", startDate);
         bundle.putString("endDate", endDate);
-        bundle.putInt("id", idIndex);
+        bundle.putString("id", idIndex);
         bundle.putInt("takenCount",takenCount);
         bundle.putInt("ignoreCount",ignoreCount);
+        bundle.putInt("startTime",startTime);
 
         return bundle;
     }
@@ -194,7 +195,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
         mSearchView.setSubmitButtonEnabled(true);
         mSearchView.setOnQueryTextListener(onQueryTextListener);
         return true;
@@ -326,7 +326,8 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 MedEntry.MED_COLUMN_START_DATE,
                 MedEntry.MED_COLUMN_END_DATE,
                 MedEntry.MED_COLUMN_TAKEN_COUNT,
-                MedEntry.MED_COLUMN_IGNORE_COUNT
+                MedEntry.MED_COLUMN_IGNORE_COUNT,
+                MedEntry.MED_COLUMN_START_TIME
         };
 
         return new CursorLoader(

@@ -157,7 +157,7 @@
                 android:layout_height="52dp"
                 android:layout_marginTop="20dp"
                 android:clickable="true"
-                android:focusable="false"
+                android:focusable="true"
                 app:layout_constraintStart_toStartOf="@+id/med_name_card"
                 app:layout_constraintTop_toBottomOf="@+id/clock_image_card">
 

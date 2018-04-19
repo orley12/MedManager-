@@ -26,18 +26,19 @@ public class CountUtilities {
         return cursor;
     }
 
-    synchronized public static void incrementTakenCount(Context context, long id) {
+    public static void incrementTakenCount(Context context, long id) {
         Cursor gottenCursor = CountUtilities.getTakenCount(context, id);
-//        int takenCount = 0;
+        int takenCount = 0;
         if (gottenCursor.moveToFirst()) {
-            int takenCount = gottenCursor.getInt(gottenCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TAKEN_COUNT));
-            Log.i(TAG,"TAKEN COUNT :" + id);
-            setTakenCount(context, id, ++takenCount);
+            takenCount = gottenCursor.getInt(gottenCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TAKEN_COUNT));
         }
+        setTakenCount(context, id, ++takenCount);
+        Log.i(TAG,"TAKEN COUNT :" + takenCount);
+
         gottenCursor.close();
     }
 
-    synchronized private static void setTakenCount(Context context, long id, int medTaken) {
+    private static void setTakenCount(Context context, long id, int medTaken) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MedEntry.MED_COLUMN_TAKEN_COUNT, medTaken);
 
@@ -58,7 +59,7 @@ public class CountUtilities {
         return cursor;
     }
 
-    synchronized public static void incrementIgnoreCount(Context context, long id) {
+    public static void incrementIgnoreCount(Context context, long id) {
         Cursor ignoreGottenCursor = CountUtilities.getIgnoreCount(context, id);
         int ignoreCount = 0;
         if (ignoreGottenCursor.moveToFirst()) {
@@ -70,7 +71,7 @@ public class CountUtilities {
         ignoreGottenCursor.close();
     }
 
-    synchronized private static void setIgnoreCount(Context context, long id, int medTaken) {
+    private static void setIgnoreCount(Context context, long id, int medTaken) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MedEntry.MED_COLUMN_IGNORE_COUNT, medTaken);
 
@@ -80,7 +81,7 @@ public class CountUtilities {
                 selectionArgs);
     }
 
-    synchronized public static void incrementMedReminderCount(Context context, long id) {
+    public static void incrementMedReminderCount(Context context, long id) {
         Cursor gottenReminderCount = CountUtilities.getMedReminderCount(context, id);
         int reminderCount = 0;
         if (gottenReminderCount.moveToFirst()) {

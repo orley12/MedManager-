@@ -29,6 +29,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.example.android.med_manager.HomeActivity;
 import com.example.android.med_manager.R;
@@ -41,6 +42,7 @@ import com.example.android.med_manager.sync.ReminderTasks;
  * Utility class for creating hydration notifications
  */
 public class NotificationUtils {
+    private static final String TAG = NotificationUtils.class.getSimpleName();
 
     /*
      * This notification ID can be used to access our notification after we've displayed it. This
@@ -72,6 +74,7 @@ public class NotificationUtils {
     }
 
     public static void remindUserToTakeMed(Context context, long id) {
+        Log.i(TAG,"IDDDDDDDD : " + id);
 
         String[] projection = {
                 MedEntry.MED_COLUMN_NAME,
@@ -103,13 +106,14 @@ public class NotificationUtils {
                 .setSmallIcon(R.drawable.ic_small_capsule_for_notification)
                 .setLargeIcon(largeIcon(context))
                 .setContentTitle(context.getString(R.string.med_reminder_notification_title))
-                .setContentText(context.getString(R.string.med_reminder_notification_body) + medName
-                        + context.getString(R.string.dosage_body) + medDosage)
+                .setContentText(context.getString(R.string.med_reminder_notification_body) + medName +
+                        "\n" + context.getString(R.string.dosage_body) + medDosage)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(
-                        context.getString(R.string.med_reminder_notification_body)))
+                        context.getString(R.string.med_reminder_notification_body)+ medName + "\n"
+                                + context.getString(R.string.dosage_body) + medDosage))
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setContentIntent(contentIntent(context))
-                .addAction(drinkWaterAction(context, id))
+                .addAction(takeMedAction(context, id))
                 .addAction(ignoreReminderAction(context, id))
                 .setAutoCancel(true);
 
@@ -135,7 +139,7 @@ public class NotificationUtils {
         return ignoreReminderAction;
     }
 
-    private static Action drinkWaterAction(Context context, long id) {
+    private static Action takeMedAction(Context context, long id) {
         Intent incrementMedTakenCountIntent = new Intent(context, MedReminderIntentService.class);
         incrementMedTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
         incrementMedTakenCountIntent.putExtra("id", id);

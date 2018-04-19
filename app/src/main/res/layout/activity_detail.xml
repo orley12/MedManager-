@@ -84,11 +84,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
-            android:textStyle="bold"
+            android:layout_marginTop="30dp"
             android:text="Med Name"
             android:textColor="@color/text_view_first_level_black"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.023"
             app:layout_constraintStart_toStartOf="parent"
@@ -115,9 +115,9 @@
             android:layout_marginRight="8dp"
             android:layout_marginTop="20dp"
             android:text="Med Type"
-            android:textStyle="bold"
             android:textColor="@color/text_view_first_level_black"
             android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/textView18"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/med_name_small_detail"
@@ -157,7 +157,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="@+id/textView22"
             app:layout_constraintTop_toBottomOf="@+id/textView22"
-            tools:text="jejihnbijjjejsihijsijejojojaohohaojaojoahojaaojiojaohojaohajal"/>
+            tools:text="jejihnbijjjejsihijsijejojojaohohaojaojoahojaaojiojaohojaohajal" />
+
         <TextView
             android:id="@+id/textView24"
             android:layout_width="wrap_content"
@@ -243,8 +244,53 @@
             app:layout_constraintTop_toTopOf="@+id/textView1"
             tools:text="You ignored use of your medication" />
 
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="3dp"
+            android:text="Time Start :"
+            app:layout_constraintStart_toStartOf="@+id/textView18"
+            app:layout_constraintTop_toBottomOf="@+id/med_type_image_detail" />
+
+        <TextView
+            android:id="@+id/start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="24dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintStart_toEndOf="@+id/textView17"
+            app:layout_constraintTop_toBottomOf="@+id/med_type_image_detail"
+            tools:text="04:00pm" />
+
+        <Button
+            android:id="@+id/button_taken_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Taken"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ignore_count_text_view" />
+
+        <Button
+            android:id="@+id/button_ignore_count"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Ignore"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.515"
+            app:layout_constraintStart_toEndOf="@+id/button_taken_count"
+            app:layout_constraintTop_toBottomOf="@+id/ignore_count_text_view" />
     </android.support.constraint.ConstraintLayout>
-
-
 
 </ScrollView>

@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label=""
+        android:label="MedManager"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -18,25 +18,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MedFormActivity" />
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".ProfileActivity"></activity>
+        <activity android:name=".MedFormActivity"
+            android:label="Med Form" />
+        <activity android:name=".DetailActivity"
+            android:label="Detail" />
+        <activity android:name=".HomeActivity"
+            android:label="Home" />
+        <activity android:name=".ProfileActivity"
+            android:label="Profile"></activity>
 
         <service
             android:name=".sync.MedReminderIntentService"
             android:exported="false" />
 
-        <!--&lt;!&ndash; This is the Service declaration used in conjunction with FirebaseJobDispatcher &ndash;&gt;-->
-        <!--<service-->
-            <!--android:name=".sync.MedReminderFirebaseJobService"-->
-            <!--android:exported="false">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />-->
-            <!--</intent-filter>-->
-        <!--</service>-->
-
-        <!-- Register the Alarm Receiver -->
         <receiver android:name=".sync.AlarmReceiver"
             android:enabled="false">
             <intent-filter>

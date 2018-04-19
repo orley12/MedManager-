@@ -24,6 +24,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
+import com.example.android.med_manager.sync.AlarmReceiver;
 import com.example.android.med_manager.sync.NotificationScheduler;
 
 import java.text.ParseException;
@@ -331,8 +332,8 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
             Toast.makeText(this, "Pets Update Failed", Toast.LENGTH_SHORT).show();
         }
         long idValueOfParseUri = ContentUris.parseId(mCurrentMedUri);
-//        ReminderUtilities.cancelSpecifiedJob(MedFormActivity.this, idValueOfParseUri);
-//        ReminderUtilities.getId(MedFormActivity.this, idValueOfParseUri);
+                    NotificationScheduler.cancelReminder(MedFormActivity.this, AlarmReceiver.class,idValueOfParseUri);
+                    NotificationScheduler.getId(MedFormActivity.this,idValueOfParseUri);
     }
 
     private void deleteMedInfoFromDb() {
@@ -346,7 +347,7 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
             Toast.makeText(this, "Medication Could Not Deleted", Toast.LENGTH_SHORT).show();
         }
         long idValueOfParseUri = ContentUris.parseId(mCurrentMedUri);
-//        ReminderUtilities.cancelSpecifiedJob(MedFormActivity.this, idValueOfParseUri);
+        NotificationScheduler.cancelReminder(MedFormActivity.this, AlarmReceiver.class,idValueOfParseUri);
         getSupportLoaderManager().restartLoader(102, null, this);
         finish();
     }

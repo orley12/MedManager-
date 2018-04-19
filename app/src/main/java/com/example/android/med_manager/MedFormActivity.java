@@ -203,6 +203,10 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         String medDescription = mMedDescriptionEditText.getText().toString().trim();
         String medDosage = mDosageEditText.getText().toString().trim();
         String medInterval = mIntervalEditText.getText().toString().trim();
+        if ( medInterval.isEmpty()|| medInterval.length() <= 0 ) {
+            Toast.makeText(this, "Please Enter An Interval", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String medStartTime = mStartTimeEditText.getText().toString().trim();
         if ( medStartTime.isEmpty()|| medStartTime.length() <= 0 ) {
             Toast.makeText(this, "Please Enter A Start Time", Toast.LENGTH_SHORT).show();
@@ -289,6 +293,10 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         String medDescription = mMedDescriptionEditText.getText().toString().trim();
         String medDosage = mDosageEditText.getText().toString().trim();
         String medInterval = mIntervalEditText.getText().toString().trim();
+        if ( medInterval.isEmpty()|| medInterval.length() <= 0 ) {
+            Toast.makeText(this, "Please Enter An Interval", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String medStartTime = mStartTimeEditText.getText().toString().trim();
         if ( medStartTime.isEmpty()|| medStartTime.length() <= 0 ) {
             Toast.makeText(this, "Please Enter A Start Time", Toast.LENGTH_SHORT).show();

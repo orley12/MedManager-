@@ -78,8 +78,6 @@ public class NotificationScheduler
     public static void getId(Context context, long idFromReturnedUri) {
                 String[] projection = {
                 MedEntry.MED_COLUMN_START_TIME,
-                MedEntry.MED_COLUMN_END_DATE,
-                MedEntry.MED_COLUMN_START_DATE,
                 MedEntry.MED_COLUMN_INTERVAL
         };
         String selection = MedEntry.MED_DB_DEFAULT_ID + "=?";
@@ -87,14 +85,10 @@ public class NotificationScheduler
         Cursor cursor = context.getContentResolver().query(MedEntry.CONTENT_URI, projection, selection,
                 selectionArgs, null);
         long startTimeMill = 0;
-        long endDate = 0;
-        long startDate = 0;
         int interval = 0;
         if (cursor.moveToFirst()) {
             startTimeMill = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
             interval = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
-            endDate = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
-            startDate = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
         }
         cursor.close();
 
@@ -105,6 +99,35 @@ public class NotificationScheduler
         int minInt = Integer.parseInt(min);
         Log.i(TAG,"INTERVAL : " + hoursInt + " " + minInt);
         NotificationScheduler.setReminder(context, AlarmReceiver.class,hoursInt,minInt,idFromReturnedUri,interval);
+    }
+
+    public static boolean todaysDate(long endDate) {
+        String endDateValue = convertFormMilliSecToDate(endDate);
+        int day = Integer.parseInt(endDateValue.substring(0,2));
+        int month = Integer.parseInt(endDateValue.substring(3,5));
+        int year = Integer.parseInt(endDateValue.substring(6,endDateValue.length()));
+
+        Calendar calendar = Calendar.getInstance();
+
+        Calendar setcalendar = Calendar.getInstance();
+        setcalendar.set(Calendar.DAY_OF_MONTH, day);
+        setcalendar.set(Calendar.MONTH, month);
+        setcalendar.set(Calendar.YEAR, year);
+
+                if(setcalendar.before(calendar)){
+                    return true;
+                }else {
+                    return false;
+                }
+    }
+
+    public static String convertFormMilliSecToDate(long date) {
+        long dateValue = date;
+        String dateFormat = "dd/MM/yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateValue);
+        return simpleDateFormat.format(calendar.getTime());
     }
 
     private static String convertFormMilliSecToTime(long startTimeMill) {

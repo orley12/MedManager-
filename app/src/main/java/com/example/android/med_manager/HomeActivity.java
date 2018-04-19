@@ -117,22 +117,15 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mRecyclerView.addOnItemTouchListener(createItemClickListener(mRecyclerView));
 
-//        ReminderUtilities.scheduleMedNotificationReminder(HomeActivity.this);
-
     }
+
 
     public RecyclerItemClickListener createItemClickListener(final RecyclerView recyclerView) {
         return new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 if (view instanceof LinearLayout) {
-//                    Cursor cursor = mMedListAdapter.entireCursorForHomeActivity();
-//                    cursor.moveToPosition(position); // get to the right location in the cursor
-//                    long idIndex = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
-//                    Intent incrementTakenCountIntent = new Intent(HomeActivity.this, MedReminderIntentService.class);
-//                    incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
-//                    incrementTakenCountIntent.putExtra("id", idIndex);
-//                    HomeActivity.this.startService(incrementTakenCountIntent);
+
                 } else {
                         Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
                         Bundle bundle = returnBundleForNewActivity(position);
@@ -154,6 +147,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 mMedListAdapter.notifyItemRemoved(position);
             }
         });
+
 }
 
     public Bundle returnBundleForNewActivity(int positionClicked) {

@@ -3,6 +3,7 @@ package com.example.android.med_manager.sync;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -25,7 +26,17 @@ public class NotificationScheduler
     public static int DAILY_REMINDER_REQUEST_CODE;
     public static final String TAG="NotificationScheduler";
 
-    public static void setReminder(Context context, Class<?> cls, int hour, int min, long id, int interval) {
+    public static void setReminder(Context context, int hour, int min, long id, int interval, int hourOrMinute) {
+        long intervalTime = 0;
+        long minuteMilli = (1000 * 60);
+        if (hourOrMinute == 1) {
+            intervalTime = minuteMilli * interval;
+        }   else {
+            long hourMilli = (minuteMilli * 60);
+            intervalTime = hourMilli * interval;
+        }
+        Log.i(TAG,"HOURVALUE : " + intervalTime);
+
         Calendar calendar = Calendar.getInstance();
 
         Calendar setcalendar = Calendar.getInstance();
@@ -33,63 +44,51 @@ public class NotificationScheduler
         setcalendar.set(Calendar.MINUTE, min);
         setcalendar.set(Calendar.SECOND, 0);
 
-        // cancel already scheduled reminders
-//        cancelReminder(context,cls,id);
-
-//        if(setcalendar.before(calendar))
-//            setcalendar.add(Calendar.DATE,1);
-
-        // Enable a receiver
-
-        ComponentName receiver = new ComponentName(context, cls);
-        PackageManager pm = context.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-        ;
-        Log.i("NOTIFICATION :","" + id);
-
-        Intent intent1 = new Intent(context, cls);
+        Intent intent1 = new Intent(context, MedReminderIntentService.class);
         intent1.putExtra("id",id);
-        final int _id = (int) System.currentTimeMillis();
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) id, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        intent1.setAction(ReminderTasks.ACTION_TAKE_MED_REMINDER);
+        PendingIntent pendingIntent = PendingIntent.getService(context, (int) id, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.setRepeating(AlarmManager.RTC_WAKEUP, setcalendar.getTimeInMillis() , AlarmManager.INTERVAL_DAY/interval, pendingIntent);
+        Log.i(TAG, "setReminder: " + id);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, setcalendar.getTimeInMillis() , intervalTime, pendingIntent);
+
+        ComponentName receiver = new ComponentName(context, AlarmReceiver.class);
+        int status = context.getPackageManager().getComponentEnabledSetting(receiver);
+        if (status == PackageManager.COMPONENT_ENABLED_STATE_ENABLED){
+            context.getPackageManager().setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED,PackageManager.DONT_KILL_APP);
+        }else {
+            Log.i(TAG,"Receiver Disabled");
+        }
     }
 
-    public static void cancelReminder(Context context, Class<?> cls, long id) {
+    public static void cancelReminder(Context context, long id) {
         // Disable a receiver
-
-        ComponentName receiver = new ComponentName(context, cls);
-        PackageManager pm = context.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-
-        Intent intent1 = new Intent(context, cls);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) id, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.cancel(pendingIntent);
-        pendingIntent.cancel();
+        Intent intent1 = new Intent(context, MedReminderIntentService.class);
+        intent1.putExtra("id",id);
+        intent1.setAction(ReminderTasks.ACTION_TAKE_MED_REMINDER);
+        PendingIntent pendingIntent = PendingIntent.getService(context, (int) id, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        Log.i(TAG, "cancelReminder: " + id);
+            am.cancel(pendingIntent);
+//        pendingIntent.cancel();
     }
 
     public static void getId(Context context, long idFromReturnedUri) {
-                String[] projection = {
-                MedEntry.MED_COLUMN_START_TIME,
-                MedEntry.MED_COLUMN_INTERVAL
-        };
-        String selection = MedEntry.MED_DB_DEFAULT_ID + "=?";
-        String[] selectionArgs = new String[]{Long.toString(idFromReturnedUri)};
-        Cursor cursor = context.getContentResolver().query(MedEntry.CONTENT_URI, projection, selection,
-                selectionArgs, null);
+
+        Cursor cursor = context.getContentResolver().query(ContentUris.withAppendedId(
+                MedEntry.CONTENT_URI, idFromReturnedUri), null, null,
+                null, null);
         long startTimeMill = 0;
         int interval = 0;
-        if (cursor.moveToFirst()) {
+        int hourOrMinute;
+
+        cursor.moveToFirst();
             startTimeMill = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
             interval = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
-        }
+            hourOrMinute = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_HOURS_OR_MINUTES));
+
+
         cursor.close();
 
         String startTime = convertFormMilliSecToTime(startTimeMill);
@@ -97,8 +96,7 @@ public class NotificationScheduler
         String min = startTime.substring(3,startTime.length());
         int hoursInt = Integer.parseInt(hours);
         int minInt = Integer.parseInt(min);
-        Log.i(TAG,"INTERVAL : " + hoursInt + " " + minInt);
-        NotificationScheduler.setReminder(context, AlarmReceiver.class,hoursInt,minInt,idFromReturnedUri,interval);
+        NotificationScheduler.setReminder(context,hoursInt,minInt,idFromReturnedUri,interval,hourOrMinute);
     }
 
     public static boolean todaysDate(long endDate) {

@@ -24,7 +24,6 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
-import com.example.android.med_manager.sync.AlarmReceiver;
 import com.example.android.med_manager.sync.NotificationScheduler;
 
 import java.text.ParseException;
@@ -58,7 +57,6 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
     Switch mSwitchView;
 
     Uri mCurrentMedUri;
-    MedListAdapter mMedListAdapter;
     private int mMedType = 0;
 
     @Override
@@ -68,8 +66,6 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
 
         Intent intent = getIntent();
         mCurrentMedUri = intent.getData();
-
-//        mMedListAdapter = new MedListAdapter(this, listener, mListener);
 
         mMedNameEditText = findViewById(R.id.med_name);
 
@@ -227,7 +223,10 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         long medEndMillSec = convertDateToMillSec(medEndDate);
         int defaultForTakenIgnoreAndReminderCount = 0;
 
-        Log.i(TAG, "TimeMillStartDateSec start:" + medStartMillSec + "   " + medEndMillSec + "  " + medStartTimeMillSec);
+        int hoursOrMinutesValue = hoursOrMinutes();
+
+
+        Log.i(TAG, "mSwitchView start:" + hoursOrMinutesValue);
 
 
         ContentValues contentValues = new ContentValues();
@@ -242,6 +241,7 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         contentValues.put(MedEntry.MED_COLUMN_TAKEN_COUNT, defaultForTakenIgnoreAndReminderCount);
         contentValues.put(MedEntry.MED_COLUMN_IGNORE_COUNT, defaultForTakenIgnoreAndReminderCount);
         contentValues.put(MedEntry.MED_COLUMN_REMINDER_COUNT, defaultForTakenIgnoreAndReminderCount);
+        contentValues.put(MedEntry.MED_COLUMN_HOURS_OR_MINUTES, hoursOrMinutesValue);
 
 
         Uri returnedUri = getContentResolver().insert(MedEntry.CONTENT_URI, contentValues);
@@ -252,7 +252,6 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         }
         long idFromReturnedUri = ContentUris.parseId(returnedUri);
         Log.i(TAG, "PASRED URI :" + idFromReturnedUri);
-//        ReminderUtilities.getId(MedFormActivity.this, idFromReturnedUri);
         NotificationScheduler.getId(MedFormActivity.this, idFromReturnedUri);
     }
 
@@ -318,6 +317,9 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         }
         long medEndMillSec = convertDateToMillSec(medEndDate);
 
+        int hoursOrMinutesValue = hoursOrMinutes();
+
+
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(MedEntry.MED_COLUMN_NAME, medName);
@@ -328,6 +330,8 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         contentValues.put(MedEntry.MED_COLUMN_INTERVAL, medInterval);
         contentValues.put(MedEntry.MED_COLUMN_START_DATE, medStartMillSec);
         contentValues.put(MedEntry.MED_COLUMN_END_DATE, medEndMillSec);
+        contentValues.put(MedEntry.MED_COLUMN_HOURS_OR_MINUTES, hoursOrMinutesValue);
+
 
         String selection = MedEntry.MED_DB_DEFAULT_ID + "=?";
         String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(mCurrentMedUri))};
@@ -340,23 +344,30 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
             Toast.makeText(this, "Pets Update Failed", Toast.LENGTH_SHORT).show();
         }
         long idValueOfParseUri = ContentUris.parseId(mCurrentMedUri);
-                    NotificationScheduler.cancelReminder(MedFormActivity.this, AlarmReceiver.class,idValueOfParseUri);
+                    NotificationScheduler.cancelReminder(MedFormActivity.this, idValueOfParseUri);
                     NotificationScheduler.getId(MedFormActivity.this,idValueOfParseUri);
     }
 
+    public int hoursOrMinutes(){
+        if (mSwitchView.isChecked()){
+            return 1;
+        }else {
+            return 0;
+        }
+    }
+
     private void deleteMedInfoFromDb() {
+        long idValueOfParseUri = ContentUris.parseId(mCurrentMedUri);
+        NotificationScheduler.cancelReminder(MedFormActivity.this, idValueOfParseUri);
         String selection = MedEntry.MED_DB_DEFAULT_ID + "=?";
         String[] selectionArgs = new String[]{String.valueOf(ContentUris.parseId(mCurrentMedUri))};
-        int newUri = getContentResolver().delete(MedEntry.CONTENT_URI, selection, selectionArgs);
+        int newUri = getContentResolver().delete(mCurrentMedUri, selection, selectionArgs);
 
         if (newUri > 0) {
             Toast.makeText(this, "Medication Deleted", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Medication Could Not Deleted", Toast.LENGTH_SHORT).show();
         }
-        long idValueOfParseUri = ContentUris.parseId(mCurrentMedUri);
-        NotificationScheduler.cancelReminder(MedFormActivity.this, AlarmReceiver.class,idValueOfParseUri);
-        getSupportLoaderManager().restartLoader(102, null, this);
         finish();
     }
 
@@ -369,6 +380,7 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
                 MedEntry.MED_COLUMN_DESCRIPTION,
                 MedEntry.MED_COLUMN_DOSAGE,
                 MedEntry.MED_COLUMN_INTERVAL,
+                MedEntry.MED_COLUMN_HOURS_OR_MINUTES,
                 MedEntry.MED_COLUMN_START_TIME,
                 MedEntry.MED_COLUMN_START_DATE,
                 MedEntry.MED_COLUMN_END_DATE
@@ -383,18 +395,19 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor mCursor) {
-        if (mCursor.moveToFirst()) {
-            String name = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_NAME));
-            int type = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TYPE));
-            String description = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DESCRIPTION));
-            int dosage = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DOSAGE));
-            String interval = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
-            String startDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
-            String endDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
-            long startTime = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        cursor.moveToFirst();
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_NAME));
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TYPE));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DESCRIPTION));
+            int dosage = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DOSAGE));
+            String interval = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
+            String startDate = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
+            String endDate = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
+            long startTime = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
+            int hourOrMinute = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_HOURS_OR_MINUTES));
 
-            Log.i(TAG, "onLoadFinished:  HERE!!!" + name + type + description);
+
             mMedNameEditText.setText(name);
             mMedTypeSpinner.setSelection(type);
             mMedDescriptionEditText.setText(description);
@@ -409,9 +422,12 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
             }else {
                 mStartTimeEditText.setText(convertFormMilliSecToTime(startTime) + " am");
             }
-
-        }
-        mCursor.close();
+            if (hourOrMinute == 1){
+                mSwitchView.setChecked(true);
+            }else {
+                mSwitchView.setChecked(false);
+            }
+        cursor.close();
     }
 
     private String convertFormMilliSecToTime(long date) {

@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.TimePicker;
 
+import com.example.android.med_manager.R;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

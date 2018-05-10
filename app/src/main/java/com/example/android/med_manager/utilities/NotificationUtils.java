@@ -19,6 +19,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -60,7 +61,7 @@ public class NotificationUtils {
     private static final int ACTION_TAKEN_PENDING_INTENT_ID = 101;
 
     /*This pending intent will be used to increment the ignore count*/
-    private static final int ACTION_IGNORE_PENDING_INTENT_ID = 104;
+    private static final int ACTION_IGNORE_PENDING_INTENT_ID = 100;
     /**
      * This notification channel id is used to link notifications to this channel
      */
@@ -76,21 +77,18 @@ public class NotificationUtils {
     public static void remindUserToTakeMed(Context context, long id) {
         Log.i(TAG,"IDDDDDDDD : " + id);
 
-        String[] projection = {
-                MedEntry.MED_COLUMN_NAME,
-                MedEntry.MED_COLUMN_DOSAGE
-        };
-        String selection = MedEntry.MED_DB_DEFAULT_ID + "=?";
-        String[] selectionArgs = new String[]{Long.toString(id)};
-        Cursor cursor = context.getContentResolver().query(MedEntry.CONTENT_URI, projection, selection,
-                selectionArgs, null);
+        if (id <= 0 ){
+            return;
+        }
+        Cursor cursor = context.getContentResolver().query(ContentUris.withAppendedId(
+                MedEntry.CONTENT_URI, id), null, null,
+                null, null);
         String medName = null;
         String medDosage = null;
-        if (cursor.moveToFirst()) {
+        cursor.moveToFirst();
             medName = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_NAME));
             medDosage = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DOSAGE));
-        }
-//        cursor.close();
+//            cursor.close();
 
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -132,7 +130,7 @@ public class NotificationUtils {
                 context,
                 ACTION_IGNORE_PENDING_INTENT_ID,
                 ignoreReminderIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT);
         Action ignoreReminderAction = new Action(R.drawable.ic_ignore_ii,
                 "No, thanks.",
                 ignoreReminderPendingIntent);

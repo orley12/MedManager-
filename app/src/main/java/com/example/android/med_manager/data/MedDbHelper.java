@@ -14,7 +14,9 @@ import com.example.android.med_manager.data.MedContract.ProfileEntry;
 public class MedDbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
+
     public static final String DATABASE_NAME = "medication.db";
+
     public static final String CREATE_PROFILE_ENTRIES = "CREATE TABLE " +
             ProfileEntry.PROFILE_TABLE_NAME + "( " +
             ProfileEntry.PROFILE_DB_DEFAULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -23,6 +25,7 @@ public class MedDbHelper extends SQLiteOpenHelper {
             ProfileEntry.PROFILE_SURNAME_NAME + " TEXT DEFAULT ''," +
             ProfileEntry.PROFILE_ID_GOOGLE + " TEXT DEFAULT ''," +
             ProfileEntry.PROFILE_USER_NAME + " TEXT DEFAULT '' " + ")";
+
     public static final String CREATE_MEDICATION_ENTRIES = "CREATE TABLE " +
             MedEntry.MED_TABLE_NAME + "( " +
             MedEntry.MED_DB_DEFAULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -36,11 +39,15 @@ public class MedDbHelper extends SQLiteOpenHelper {
             MedEntry.MED_COLUMN_TAKEN_COUNT + " INTEGER," +
             MedEntry.MED_COLUMN_IGNORE_COUNT + " INTEGER," +
             MedEntry.MED_COLUMN_START_TIME + " INTEGER," +
+            MedEntry.MED_COLUMN_HOURS_OR_MINUTES + " INTEGER," +
             MedEntry.MED_COLUMN_REMINDER_COUNT + " INTEGER" + ")";
+
     public static final String SQL_DELETE_PROFILE_ENTRIES =
             "DROP TABLE IF EXISTS " + ProfileEntry.PROFILE_TABLE_NAME;
+
     public static final String SQL_DELETE_MEDICATION_ENTRIES =
             "DROP TABLE IF EXISTS " + ProfileEntry.PROFILE_TABLE_NAME;
+
     private static final String TAG = MedDbHelper.class.getSimpleName();
 
     public MedDbHelper(Context context) {

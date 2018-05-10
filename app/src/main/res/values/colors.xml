@@ -7,4 +7,12 @@
     <color name="edit_text_background_color">#ffffff</color>
     <color name="text_view_first_level_black">#37474F</color>
     <color name="text_vieww_black">#000000</color>
+    <color name="capsule_color">#A951ED</color>
+    <color name="tablet_color">#02B3E4</color>
+    <color name="syrup_color">#FFA234</color>
+    <color name="inhaler_color">#A4C639</color>
+    <color name="injection_color">#1C262F</color>
+    <color name="eye_drop_color">#F24E1E</color>
+    <color name="onitement_color">#D3AA02</color>
+    <color name="others_color">#2D1740</color>
 </resources>

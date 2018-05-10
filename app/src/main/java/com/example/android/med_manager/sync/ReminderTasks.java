@@ -24,14 +24,15 @@ public class ReminderTasks {
 
     public static final String ACTION_INCREMENT_MED_TAKEN_COUNT = "increment-med-taken-count";
     public static final String ACTION_INCREMENT_MED_IGNORE_COUNT = "increment-med-ignore-count";
-    static final String ACTION_TAKE_MED_REMINDER = "take-med-reminder";
+    public static final String ACTION_TAKE_MED_REMINDER = "take-med-reminder";
+
+    private static final String TAG = ReminderTasks.class.getSimpleName();
 
     public static void executeTask(Context context, String action, long id) {
         if (ACTION_INCREMENT_MED_TAKEN_COUNT.equals(action)) {
             incrementMedTakenCount(context, id);
         } else if (ACTION_INCREMENT_MED_IGNORE_COUNT.equals(action)) {
             incrementMedIgnoreCount(context, id);
-            NotificationUtils.clearAllNotifications(context);
         } else if (ACTION_TAKE_MED_REMINDER.equals(action)) {
             issueMedReminder(context, id);
         }
@@ -48,7 +49,6 @@ public class ReminderTasks {
     }
 
     private static void issueMedReminder(Context context, long id) {
-//        CountUtilities.incrementMedReminderCount(context, id);
-        NotificationUtils.remindUserToTakeMed(context, id);
+            NotificationUtils.remindUserToTakeMed(context, id);
     }
 }

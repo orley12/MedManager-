@@ -1,20 +1,27 @@
 package com.example.android.med_manager;
 
+
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
-import com.example.android.med_manager.utilities.CountUtilities;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class DetailActivity extends AppCompatActivity {
+//import android.content.Loader;
+
+public class DetailActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String TAG = DetailActivity.class.getSimpleName() ;
 
@@ -46,125 +53,132 @@ public class DetailActivity extends AppCompatActivity {
 
     Button mIgnoreButton;
 
+    Uri mCurrentMedUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Bundle bundle = getIntent().getBundleExtra("bundle");
-        String name = bundle.getString("name");
-        int type = bundle.getInt("type");
-        String description = bundle.getString("description");
-        int dosage = bundle.getInt("dosage");
-        String interval = bundle.getString("interval");
-        String startDate = bundle.getString("startDate");
-        String endDate = bundle.getString("endDate");
-        int takenCount = bundle.getInt("takenCount");
-        int ignoreCount = bundle.getInt("ignoreCount");
-        long startTime = bundle.getLong("startTime");
-        String id = bundle.getString("id");
+        Intent intent = getIntent();
+        mCurrentMedUri = intent.getData();
+        Log.i(TAG, "CONTAINER :" + mCurrentMedUri);
 
-        Log.i(TAG,"STARTTIME :" + id);
-
+//        final long id = ContentUris.parseId(mCurrentMedUri);
 
         mMedNameTextView = findViewById(R.id.med_name_detail);
-        mMedNameTextView.setText(name);
         mMedTypeImageView = findViewById(R.id.med_type_image_detail);
-        getImageForTypeImageView(type);
         mMedTypeTextView = findViewById(R.id.med_type_text_detail);
-        getTextForTypeTextView(type);
         mMedDescriptionTextView = findViewById(R.id.med_description_detail);
-        mMedDescriptionTextView.setText(description);
         mMedDosageTextView = findViewById(R.id.med_dosage_detail);
-        mMedDosageTextView.setText(Integer.toString(dosage));
         mMedIntervalTextView = findViewById(R.id.med_interval_detail);
-        mMedIntervalTextView.setText(interval);
         mMedStartDateTextView = findViewById(R.id.start_date_detail);
-        mMedStartDateTextView.setText(convertFormMilliSecToDate(startDate));
         mMedEndDateTextView = findViewById(R.id.end_date_detail);
-        mMedEndDateTextView.setText(convertFormMilliSecToDate(endDate));
         mMedNameSmallTextView = findViewById(R.id.med_name_small_detail);
-        mMedNameSmallTextView.setText(name);
         mTakenTextView = findViewById(R.id.taken_count_text_view);
-        mTakenTextView.setText("You used your medications :" + takenCount + " times.");
         mIgnoreTextView = findViewById(R.id.ignore_count_text_view);
-        mIgnoreTextView.setText("You ignored use of your medication :" + ignoreCount + " times.");
         mStartTimeTextView = findViewById(R.id.start_time);
-        String startTimeString = convertFormMilliSecToTime(startTime);
-        int startTimeInt = Integer.parseInt(startTimeString.substring(0,2));
-        if (startTimeInt >= 12) {
-            mStartTimeTextView.setText(convertFormMilliSecToTime(startTime) + " pm");
-        }else {
-            mStartTimeTextView.setText(convertFormMilliSecToTime(startTime) + " am");
+
+        getSupportLoaderManager().initLoader(101, null, this);
+
+
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        String[] projection = {
+                MedEntry.MED_DB_DEFAULT_ID,
+                MedEntry.MED_COLUMN_NAME,
+                MedEntry.MED_COLUMN_TYPE,
+                MedEntry.MED_COLUMN_DESCRIPTION,
+                MedEntry.MED_COLUMN_DOSAGE,
+                MedEntry.MED_COLUMN_INTERVAL,
+                MedEntry.MED_COLUMN_START_TIME,
+                MedEntry.MED_COLUMN_START_DATE,
+                MedEntry.MED_COLUMN_END_DATE,
+                MedEntry.MED_COLUMN_TAKEN_COUNT,
+                MedEntry.MED_COLUMN_IGNORE_COUNT
+        };
+        return new CursorLoader(
+                DetailActivity.this,
+                mCurrentMedUri,
+                projection,
+                null,
+                null,
+                null);
         }
-        mTakenButton = findViewById(R.id.button_taken_count);
-        onClickOnTakenButton(Long.parseLong(id));
-        mIgnoreButton = findViewById(R.id.button_ignore_count);
-        onClickOnIgnoreButton(Long.parseLong(id));
-    }
 
-    private void onClickOnTakenButton(final long id){
-        mTakenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CountUtilities.incrementTakenCount(DetailActivity.this,id);
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+        cursor.moveToFirst();
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_NAME));
+            int type = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TYPE));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DESCRIPTION));
+            int dosage = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DOSAGE));
+            int interval = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
+            long startDate = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
+            long endDate = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
+            long startTime = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_TIME));
+            int takenCount = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TAKEN_COUNT));
+            int ignoreCount = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_IGNORE_COUNT));
+
+            mMedNameTextView.setText(name);
+            getImageForTypeImageView(type);
+            getTextForTypeTextView(type);
+            mMedDescriptionTextView.setText(description);
+            mMedDosageTextView.setText(Integer.toString(dosage));
+            mMedIntervalTextView.setText(Integer.toString(interval));
+            mMedStartDateTextView.setText(convertFormMilliSecToDate(startDate));
+            mMedEndDateTextView.setText(convertFormMilliSecToDate(endDate));
+            mMedNameSmallTextView.setText(name);
+            mTakenTextView.setText("You used your medications :" + takenCount + " times.");
+            mIgnoreTextView.setText("You ignored use of your medication :" + ignoreCount + " times.");
+            String startTimeString = convertFormMilliSecToTime(startTime);
+            int startTimeInt = Integer.parseInt(startTimeString.substring(0, 2));
+            if (startTimeInt >= 12) {
+                mStartTimeTextView.setText(convertFormMilliSecToTime(startTime) + " pm");
+            } else {
+                mStartTimeTextView.setText(convertFormMilliSecToTime(startTime) + " am");
             }
-        });
-    }
+        cursor.close();
 
-    private void onClickOnIgnoreButton(final long id){
-        mIgnoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CountUtilities.incrementIgnoreCount(DetailActivity.this,id);
-            }
-        });
-    }
-
-    private String convertFormMilliSecToTime(long date) {
-        long dateValue = date;
-        String dateFormat = "HH:mm";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateValue);
-        return simpleDateFormat.format(calendar.getTime());
-    }
-
-    private String convertFormMilliSecToDate(String date) {
-        long dateValue = Long.parseLong(date);
-        String dateFormat = "dd-MM-yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(dateValue);
-        return simpleDateFormat.format(calendar.getTime());
     }
 
     private void getImageForTypeImageView(int type) {
         switch (type) {
             case MedEntry.MED_TYPE_CAPSULES:
                 mMedTypeImageView.setImageResource(R.drawable.ic_capsule);
+                mMedTypeImageView.setBackgroundColor(getResources().getColor(R.color.capsule_color));
                 break;
             case MedEntry.MED_TYPE_TABLETS:
                 mMedTypeImageView.setImageResource(R.drawable.ic_tablet);
+                mMedTypeImageView.setBackgroundColor(getResources().getColor(R.color.tablet_color));
                 break;
             case MedEntry.MED_TYPE_SYRUP:
                 mMedTypeImageView.setImageResource(R.drawable.ic_syrup_liquid);
+                mMedTypeImageView.setBackgroundColor(getResources().getColor(R.color.syrup_color));
                 break;
             case MedEntry.MED_TYPE_INHALER:
                 mMedTypeImageView.setImageResource(R.drawable.ic_inhaler);
+                mMedTypeImageView.setBackgroundColor(getResources().getColor(R.color.inhaler_color));
                 break;
             case MedEntry.MED_TYPE_DROPS:
                 mMedTypeImageView.setImageResource(R.drawable.ic_eye_drop);
+                mMedTypeImageView.setBackgroundColor(getResources().getColor(R.color.eye_drop_color));
                 break;
             case MedEntry.MED_TYPE_OINTMENT:
                 mMedTypeImageView.setImageResource(R.drawable.ic_ointiment);
+                mMedTypeImageView.setBackgroundColor(getResources().getColor(R.color.onitement_color));
                 break;
             case MedEntry.MED_TYPE_INJECTION:
                 mMedTypeImageView.setImageResource(R.drawable.ic_injection);
+                mMedTypeImageView.setBackgroundColor(getResources().getColor(R.color.injection_color));
                 break;
             case MedEntry.MED_TYPE_OTHERS:
                 mMedTypeImageView.setImageResource(R.drawable.ic_other_meds);
+                mMedTypeImageView.setBackgroundColor(getResources().getColor(R.color.others_color));
                 break;
         }
     }
@@ -198,4 +212,26 @@ public class DetailActivity extends AppCompatActivity {
         }
     }
 
+    private String convertFormMilliSecToTime(long date) {
+        long dateValue = date;
+        String dateFormat = "HH:mm";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(dateValue);
+        return simpleDateFormat.format(calendar.getTime());
+    }
+
+    private String convertFormMilliSecToDate(long date) {
+//        long dateValue = Long.parseLong(date);
+        String dateFormat = "dd-MM-yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(date);
+        return simpleDateFormat.format(calendar.getTime());
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        loader.reset();
+    }
 }

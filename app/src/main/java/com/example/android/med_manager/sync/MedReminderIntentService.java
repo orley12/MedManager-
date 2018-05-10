@@ -16,8 +16,13 @@
 package com.example.android.med_manager.sync;
 
 import android.app.IntentService;
+import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+
+import com.example.android.med_manager.data.MedContract.MedEntry;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -35,5 +40,21 @@ public class MedReminderIntentService extends IntentService {
         Bundle bundle = intent.getExtras();
         long id = bundle.getLong("id");
         ReminderTasks.executeTask(this, action, id);
+        cancelAlarm(this,id);
+    }
+
+    public void cancelAlarm(Context context, long id){
+
+        Cursor cursor = context.getContentResolver().query(ContentUris.withAppendedId(MedEntry.CONTENT_URI, id), null, null,
+                null, null);
+        long endDate = 0;
+        cursor.moveToFirst();
+            endDate = cursor.getLong(cursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
+
+            cursor.close();
+
+        if (NotificationScheduler.todaysDate(endDate) == true){
+            NotificationScheduler.cancelReminder(context,id);
+        }
     }
 }

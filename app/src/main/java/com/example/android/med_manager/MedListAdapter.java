@@ -18,7 +18,6 @@ import com.example.android.med_manager.sync.ReminderTasks;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 //import com.example.android.med_manager.sync.ReminderUtilities;
 
 /**
@@ -33,12 +32,11 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
 
     Cursor mCursor;
 
-//    ReminderUtilities mReminderUtilities;
+//    ArrayList<MedData> mMedDataArrayList;
 
     public MedListAdapter(Context context) {
         mContext = context;
     }
-
 
     @Override
     public MedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -48,22 +46,18 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
     }
 
     @Override
-    public void onBindViewHolder(MedViewHolder holder, final int position) {
-
+    public void onBindViewHolder(MedViewHolder holder, int position) {
         mCursor.moveToPosition(position); // get to the right location in the cursor
 
         final long idIndex = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
         String name = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_NAME));
         int type = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_TYPE));
-        String description = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DESCRIPTION));
         int dosage = mCursor.getInt(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_DOSAGE));
-        String interval = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_INTERVAL));
-        String startDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
-        String endDate = mCursor.getString(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
+        long startDate = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_START_DATE));
+        long endDate = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_END_DATE));
 
         holder.itemView.setTag(idIndex);
-        Log.i(LOG_TAG, "HERE WE ARE !!!" + name + type + description + dosage + interval + startDate + endDate);
-        bindHolder(holder, name, type, description, dosage, interval, startDate, endDate);
+        bindHolder(holder, name, type, dosage, startDate, endDate);
 
         holder.medTakenLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,13 +77,13 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
                 incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_IGNORE_COUNT);
                 incrementTakenCountIntent.putExtra("id", idIndex);
                 mContext.startService(incrementTakenCountIntent);
-                Log.i(LOG_TAG, "CALLED IGNORE WHAT IS HERE :" + position);
+//                Log.i(LOG_TAG, "CALLED IGNORE WHAT IS HERE :" + position);
             }
         });
     }
 
-    private void bindHolder(MedViewHolder holder, String name, int type, String description,
-                            int dosage, String interval, String startDate, String endDate) {
+    private void bindHolder(MedViewHolder holder, String name, int type,
+                            int dosage, long startDate, long endDate) {
         holder.medNameTextView.setText(name);
         holder.medDosageTextView.setText(Integer.toString(dosage));
         String startDateSubString = reduceDateLength(convertFormMilliSecToDate(startDate));
@@ -104,12 +98,12 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
         return dateValue.substring(0,dateValue.length()-5);
     }
 
-    private String convertFormMilliSecToDate(String date) {
-        long dateValue = Long.parseLong(date);
+    private String convertFormMilliSecToDate(long date) {
+//        long dateValue = Long.parseLong(date);
         String dateFormat = "dd-MM-yyyy";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
          Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(dateValue);
+            calendar.setTimeInMillis(date);
             return simpleDateFormat.format(calendar.getTime());
     }
 
@@ -117,27 +111,35 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
         switch (type) {
             case MedEntry.MED_TYPE_CAPSULES:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_capsule);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.capsule_color));
                 break;
             case MedEntry.MED_TYPE_TABLETS:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_tablet);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.tablet_color));
                 break;
             case MedEntry.MED_TYPE_SYRUP:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_syrup_liquid);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.syrup_color));
                 break;
             case MedEntry.MED_TYPE_INHALER:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_inhaler);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.inhaler_color));
                 break;
             case MedEntry.MED_TYPE_DROPS:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_eye_drop);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.eye_drop_color));
                 break;
             case MedEntry.MED_TYPE_OINTMENT:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_ointiment);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.onitement_color));
                 break;
             case MedEntry.MED_TYPE_INJECTION:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_injection);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.injection_color));
                 break;
             case MedEntry.MED_TYPE_OTHERS:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_other_meds);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.others_color));
                 break;
         }
     }
@@ -194,10 +196,4 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
         }
     }
 
-    public void filter(String charText) {
-        charText = charText.toLowerCase(Locale.getDefault());
-        if (charText.length() == 0){
-
-        }
-    }
 }

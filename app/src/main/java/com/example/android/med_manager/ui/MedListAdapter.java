@@ -1,20 +1,18 @@
-package com.example.android.med_manager;
+package com.example.android.med_manager.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.med_manager.R;
+import com.example.android.med_manager.customViews.IgnoreButton;
+import com.example.android.med_manager.customViews.TakenButton;
 import com.example.android.med_manager.data.MedContract.MedEntry;
-import com.example.android.med_manager.sync.MedReminderIntentService;
-import com.example.android.med_manager.sync.ReminderTasks;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,7 +39,7 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
     @Override
     public MedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext)
-                .inflate(R.layout.med_card_view, parent, false);
+                .inflate(R.layout.med_item_card_view, parent, false);
         return new MedViewHolder(view);
     }
 
@@ -59,27 +57,24 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
         holder.itemView.setTag(idIndex);
         bindHolder(holder, name, type, dosage, startDate, endDate);
 
-        holder.medTakenLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent incrementTakenCountIntent = new Intent(mContext, MedReminderIntentService.class);
-                incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
-                incrementTakenCountIntent.putExtra("id", idIndex);
-                mContext.startService(incrementTakenCountIntent);
-                Log.i(LOG_TAG, "ALSO CALLED WHAT IS HERE :" + idIndex);
-            }
-        });
+//        holder.medTakenLinearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent incrementTakenCountIntent = new Intent(mContext, MedReminderIntentService.class);
+//                incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
+//                incrementTakenCountIntent.putExtra("id", idIndex);
+//                mContext.startService(incrementTakenCountIntent);
+//                Log.i(LOG_TAG, "ALSO CALLED WHAT IS HERE :" + idIndex);
+//            }
+//        });
 
-        holder.medIgnoreLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent incrementTakenCountIntent = new Intent(mContext, MedReminderIntentService.class);
-                incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_IGNORE_COUNT);
-                incrementTakenCountIntent.putExtra("id", idIndex);
-                mContext.startService(incrementTakenCountIntent);
-//                Log.i(LOG_TAG, "CALLED IGNORE WHAT IS HERE :" + position);
-            }
-        });
+//        holder.medIgnoreLinearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+////                Log.i(LOG_TAG, "CALLED IGNORE WHAT IS HERE :" + position);
+//            }
+//        });
     }
 
     private void bindHolder(MedViewHolder holder, String name, int type,
@@ -178,8 +173,8 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
         TextView medStartTextView;
         TextView medEndTextView;
         ImageView medTypeImageView;
-        LinearLayout medTakenLinearLayout;
-        LinearLayout medIgnoreLinearLayout;
+        TakenButton medTakenLinearLayout;
+        IgnoreButton medIgnoreLinearLayout;
 
 
         public MedViewHolder(View itemView) {

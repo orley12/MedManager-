@@ -1,4 +1,4 @@
-package com.example.android.med_manager;
+package com.example.android.med_manager.utilities;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -19,7 +19,7 @@ import java.util.Date;
  * Created by SOLARIN O. OLUBAYODE on 04/04/18.
  */
 
-public class DatePickerStartFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
+public class DatePickerEndFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -33,6 +33,7 @@ public class DatePickerStartFragment extends DialogFragment implements DatePicke
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+//        String monthString = monthInString(month);
         getDate(year, month, day);
     }
 
@@ -53,8 +54,8 @@ public class DatePickerStartFragment extends DialogFragment implements DatePicke
 
     public void setDate(String newDateString) {
 //        String monthString = monthInString(month);
-        EditText startDateEditText = getActivity().findViewById(R.id.med_start_date);
-        startDateEditText.setText(newDateString);
+        EditText endDateEditText = getActivity().findViewById(R.id.med_end_date);
+        endDateEditText.setText(newDateString);
     }
 //    private String monthInString(int month) {
 //        String monthString = null;

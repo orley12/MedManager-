@@ -1,9 +1,6 @@
-package com.example.android.med_manager;
-
-import android.content.ContentUris;
+package com.example.android.med_manager.ui;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.android.med_manager.R;
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.data.MedContract.ProfileEntry;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -21,6 +19,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -32,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         hindStatusBar();
-        this.setContentView(R.layout.activity_main);
+        this.setContentView(R.layout.activity_login);
         /* the GoogleSignInOptions helps our this app request the user data required by this app for
          * example if while building the calling the Builder() method on the GoogleSignInOptions
          * we chain methods call of requestEmail(), requestProfile(), requestId() methods, the result
@@ -91,18 +90,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             Log.i(LOG_TAG, "THE LOGS YOU LOOKING FOR" + usersEmail + usersName + usersFamilyName + usersId + usersDisplayName);
 
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, "");
-            contentValues.put(ProfileEntry.PROFILE_COLUMN_NAME, "");
-            contentValues.put(ProfileEntry.PROFILE_SURNAME_NAME, "");
-            contentValues.put(ProfileEntry.PROFILE_ID_GOOGLE, "");
-            contentValues.put(ProfileEntry.PROFILE_USER_NAME, "");
-
-            Uri returnedUri = getContentResolver().insert(ProfileEntry.CONTENT_URI, contentValues);
-            long idValueOfParseUri = ContentUris.parseId(returnedUri);
-            Log.i(LOG_TAG, "THE ID YOU LOOKING FOR" + idValueOfParseUri);
-            insertValuesIntoDatabase(idValueOfParseUri, usersEmail, usersName, usersFamilyName, usersId, usersDisplayName);
-            launchHomeActivity();
+//            ContentValues contentValues = new ContentValues();
+//            contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, "");
+//            contentValues.put(ProfileEntry.PROFILE_COLUMN_NAME, "");
+//            contentValues.put(ProfileEntry.PROFILE_SURNAME_NAME, "");
+//            contentValues.put(ProfileEntry.PROFILE_ID_GOOGLE, "");
+//            contentValues.put(ProfileEntry.PROFILE_USER_NAME, "");
+//
+//            Uri returnedUri = getContentResolver().insert(ProfileEntry.CONTENT_URI, contentValues);
+//            long idValueOfParseUri = ContentUris.parseId(returnedUri);
+//            Log.i(LOG_TAG, "THE ID YOU LOOKING FOR" + idValueOfParseUri);
+//            insertValuesIntoDatabase(idValueOfParseUri, usersEmail, usersName, usersFamilyName, usersId, usersDisplayName);
+//            launchHomeActivity();
         }
     }
 

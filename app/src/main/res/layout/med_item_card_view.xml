@@ -28,7 +28,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/view"
+                android:id="@+id/view_card"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="8dp"
@@ -53,7 +53,7 @@
                 android:textSize="35sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/view"
+                app:layout_constraintStart_toEndOf="@+id/view_card"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -141,12 +141,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/med_dosage_card" />
 
             <ImageView
-                android:id="@+id/imageView5"
+                android:id="@+id/imageView5_card"
                 android:layout_width="160dp"
                 android:layout_height="0.1dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:background="#c0c0c0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.959"
@@ -155,76 +155,27 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginLeft="15dp" />
 
-
-            <LinearLayout
-                android:id="@+id/taken_layout_card"
-                android:layout_width="wrap_content"
-                android:layout_height="52dp"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:focusable="false"
-                app:layout_constraintStart_toStartOf="@+id/med_name_card"
-                app:layout_constraintTop_toBottomOf="@+id/clock_image_card">
-
-                <ImageView
-                    android:id="@+id/taken_image_card"
+                <com.example.android.med_manager.customViews.TakenButton
+                    android:id="@+id/taken_layout_card"
+                    app:layout_constraintStart_toStartOf="@+id/med_name_card"
+                    app:layout_constraintTop_toBottomOf="@+id/clock_image_card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="Taken"
                     android:clickable="false"
                     android:focusable="false"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_small_capsule_for_card_i" />
+                    android:layout_marginTop="10dp" />
 
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="35dp"
-                    android:clickable="false"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="7dp"
-                    android:text="TAKEN"
-                    android:textAllCaps="true"
-                    android:focusable="false"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ignore_layout_card"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:focusable="false"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toEndOf="@+id/taken_layout_card"
-                app:layout_constraintTop_toBottomOf="@+id/clock_image_card">
-
-                <ImageView
-                    android:id="@+id/ignore_image_card"
+                <com.example.android.med_manager.customViews.IgnoreButton
+                    android:id="@+id/ignore_layout_card"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/taken_layout_card"
+                    app:layout_constraintTop_toBottomOf="@+id/clock_image_card"
+                    android:text="Ignore"
                     android:clickable="false"
                     android:focusable="false"
-                    android:layout_marginTop="10dp"
-                    android:src="@drawable/ic_ignore_ii" />
-
-                <TextView
-                    android:id="@+id/button5"
-                    android:layout_width="50dp"
-                    android:layout_height="35dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="7dp"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:text="IGNORE"
-                    android:textAllCaps="true"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
+                    android:layout_marginTop="10dp" />
 
         </android.support.constraint.ConstraintLayout>
 

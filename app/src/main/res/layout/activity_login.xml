@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.med_manager.LoginActivity">
+    tools:context="com.example.android.med_manager.ui.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView13"
@@ -17,7 +17,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/med_img_i" />
 
     <ImageView
@@ -68,7 +68,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/username_edit_text"
         android:layout_width="270dp"
         android:layout_height="53dp"
         android:layout_marginEnd="8dp"
@@ -84,7 +84,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/editText4"
+        android:id="@+id/password_editText4"
         android:layout_width="270dp"
         android:layout_height="54dp"
         android:layout_marginEnd="8dp"
@@ -94,10 +94,10 @@
         android:hint="Password"
         android:inputType="textPassword"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/editText3"
+        app:layout_constraintEnd_toEndOf="@+id/username_edit_text"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/editText3"
-        app:layout_constraintTop_toBottomOf="@+id/editText3" />
+        app:layout_constraintStart_toStartOf="@+id/username_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/username_edit_text" />
 
     <TextView
         android:id="@+id/textView3"
@@ -108,11 +108,11 @@
         android:layout_marginTop="90dp"
         android:text="Need help logging in"
         android:textColor="@color/edit_text_background_color"
-        app:layout_constraintStart_toStartOf="@+id/editText4"
-        app:layout_constraintTop_toTopOf="@+id/editText4" />
+        app:layout_constraintStart_toStartOf="@+id/password_editText4"
+        app:layout_constraintTop_toTopOf="@+id/password_editText4" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/login_button"
         android:layout_width="87dp"
         android:layout_height="35dp"
         android:layout_marginTop="70dp"
@@ -120,8 +120,8 @@
         android:text="Login"
         android:textAllCaps="false"
         android:textColor="@color/edit_text_background_color"
-        app:layout_constraintEnd_toEndOf="@+id/editText4"
-        app:layout_constraintTop_toTopOf="@+id/editText4" />
+        app:layout_constraintEnd_toEndOf="@+id/password_editText4"
+        app:layout_constraintTop_toTopOf="@+id/password_editText4" />
 
     <TextView
         android:id="@+id/textView4"
@@ -129,7 +129,7 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="128dp"
+        android:layout_marginTop="56dp"
         android:text="Sign in with"
         android:textColor="@color/edit_text_background_color"
         android:textSize="11sp"
@@ -165,7 +165,27 @@
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4"
-        app:layout_constraintVertical_bias="0.652" />
+        app:layout_constraintVertical_bias="0.086" />
+
+
+    <!--<com.example.android.med_manager.customViews.SignUpButton-->
+        <!--android:id="@+id/email_sign_up_button"-->
+        <!--android:layout_width="280dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="96dp"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:background="@color/common_google_signin_btn_text_dark_default"-->
+        <!--android:text="Sign Up"-->
+        <!--android:textAllCaps="false"-->
+        <!--android:textColor="@color/common_google_signin_btn_text_light"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.495"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/imageView13"-->
+        <!--app:layout_constraintVertical_bias="0.994" />-->
 
 
 </android.support.constraint.ConstraintLayout>

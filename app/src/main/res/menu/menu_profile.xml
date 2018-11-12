@@ -8,36 +8,21 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
---><!-- Options menu for the EditorActivity -->
+--><!-- Options menu for the CatalogActivity -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.HomeActivity">
+    tools:context=".ui.MedFormActivity">
 
     <item
-        android:id="@+id/action_profile"
-        android:title="@string/action_profile"
+        android:id="@+id/action_save"
+        android:icon="@drawable/ic_correct"
+        android:title="@string/action_save"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_log_out"
+        android:title="@string/action_log_out"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_add_med"
-        android:title="@string/action_add"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_delete_all_meds"
-        android:title="@string/action_delete_all_meds"
-        app:showAsAction="never" />
-
-    <item
-
-        app:showAsAction="never" />
-
-
-    <item
-        android:id="@+id/action_search"
-        android:title="@string/action_search"
-        app:showAsAction="always"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
 
 </menu>

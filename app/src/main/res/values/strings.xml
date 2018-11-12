@@ -23,7 +23,7 @@
     <string name="action_search">Search</string>
     <string name="user_name">Username</string>
     <string name="id">Id</string>
-    <string name="email">email</string>
+    <string name="email">Email</string>
     <string name="first_name">Firstname</string>
     <string name="lastname">Lastname</string>
     <string name="med_type_capsules">Capsules</string>
@@ -39,4 +39,8 @@
     <string name="med_reminder_notification_body">You are to use :</string>
     <string name="dosage_body">Your dosage is :</string>
     <string name="start_time">8:00pm</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="password">Password</string>
+    <string name="action_log_out">Logout</string>
 </resources>

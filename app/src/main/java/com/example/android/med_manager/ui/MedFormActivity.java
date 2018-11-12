@@ -1,4 +1,4 @@
-package com.example.android.med_manager;
+package com.example.android.med_manager.ui;
 
 import android.app.DialogFragment;
 import android.content.ContentUris;
@@ -23,6 +23,10 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.android.med_manager.utilities.DatePickerEndFragment;
+import com.example.android.med_manager.utilities.DatePickerStartFragment;
+import com.example.android.med_manager.R;
+import com.example.android.med_manager.utilities.TimePickerFragment;
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.sync.NotificationScheduler;
 
@@ -67,23 +71,23 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         Intent intent = getIntent();
         mCurrentMedUri = intent.getData();
 
-        mMedNameEditText = findViewById(R.id.med_name);
+        mMedNameEditText = (EditText) findViewById(R.id.med_name);
 
-        mMedTypeSpinner = findViewById(R.id.spinner_med_type);
+        mMedTypeSpinner = (Spinner) findViewById(R.id.spinner_med_type);
 
-        mMedDescriptionEditText = findViewById(R.id.med_description);
+        mMedDescriptionEditText = (EditText) findViewById(R.id.med_description);
 
-        mDosageEditText = findViewById(R.id.med_dosage);
+        mDosageEditText = (EditText) findViewById(R.id.med_dosage);
 
-        mIntervalEditText = findViewById(R.id.med_interval);
+        mIntervalEditText = (EditText) findViewById(R.id.med_interval);
 
-        mStartDateEditText = findViewById(R.id.med_start_date);
+        mStartDateEditText = (EditText) findViewById(R.id.med_start_date);
 
-        mEndDateEditText = findViewById(R.id.med_end_date);
+        mEndDateEditText = (EditText) findViewById(R.id.med_end_date);
 
-        mStartTimeEditText = findViewById(R.id.start_time_edit_text);
+        mStartTimeEditText = (EditText) findViewById(R.id.start_time_edit_text);
 
-        mSwitchView = findViewById(R.id.switch_interval);
+        mSwitchView = (Switch) findViewById(R.id.switch_interval);
 
         setupSpinner();
         lunchTimePickerStartFragment();

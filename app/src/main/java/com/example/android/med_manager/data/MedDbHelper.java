@@ -24,7 +24,10 @@ public class MedDbHelper extends SQLiteOpenHelper {
             ProfileEntry.PROFILE_COLUMN_NAME + " TEXT DEFAULT ''," +
             ProfileEntry.PROFILE_SURNAME_NAME + " TEXT DEFAULT ''," +
             ProfileEntry.PROFILE_ID_GOOGLE + " TEXT DEFAULT ''," +
-            ProfileEntry.PROFILE_USER_NAME + " TEXT DEFAULT '' " + ")";
+            ProfileEntry.PROFILE_USER_NAME + " TEXT DEFAULT ''," +
+            ProfileEntry.PROFILE_COLUMN_PASSWORD + " TEXT DEFAULT ''," +
+            ProfileEntry.COLUMN_USER_PHOTO_URI + " TEXT DEFAULT ''," +
+            " UNIQUE (" + ProfileEntry.PROFILE_COLUMN_EMAIL + ") ON CONFLICT REPLACE);";
 
     public static final String CREATE_MEDICATION_ENTRIES = "CREATE TABLE " +
             MedEntry.MED_TABLE_NAME + "( " +

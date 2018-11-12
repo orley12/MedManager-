@@ -32,11 +32,11 @@ import android.support.v4.app.NotificationCompat.Action;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
-import com.example.android.med_manager.HomeActivity;
 import com.example.android.med_manager.R;
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.sync.MedReminderIntentService;
 import com.example.android.med_manager.sync.ReminderTasks;
+import com.example.android.med_manager.ui.HomeActivity;
 
 
 /**

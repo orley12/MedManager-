@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.med_manager.data.MedContract.MedEntry;
+import com.example.android.med_manager.ui.DetailActivity;
 
 /**
  * Created by SOLARIN O. OLUBAYODE on 18/04/18.
@@ -33,7 +34,7 @@ public class SearchAdapter extends CursorAdapter {
 
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            View view = mLayoutInflater.inflate(R.layout.med_card_view, parent, false);
+            View view = mLayoutInflater.inflate(R.layout.med_item_card_view, parent, false);
             return view;
         }
 

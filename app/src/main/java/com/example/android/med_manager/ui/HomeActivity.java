@@ -1,4 +1,4 @@
-package com.example.android.med_manager;
+package com.example.android.med_manager.ui;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 import android.support.design.widget.FloatingActionButton;
+import android.support.test.espresso.IdlingResource;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -19,12 +23,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.example.android.med_manager.customViews.IgnoreButton;
+import com.example.android.med_manager.R;
+import com.example.android.med_manager.utilities.RecyclerItemClickListener;
+import com.example.android.med_manager.SearchAdapter;
+import com.example.android.med_manager.customViews.TakenButton;
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.data.MedDbHelper;
+import com.example.android.med_manager.idlingResource.SimpleIdlingResource;
+import com.example.android.med_manager.sync.MedReminderIntentService;
 import com.example.android.med_manager.sync.NotificationScheduler;
+import com.example.android.med_manager.sync.ReminderTasks;
 
 //import android.support.v4.content.Loader;
 
@@ -52,6 +63,22 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
     ListView listView;
 
+    // The Idling Resource which will be null in production.
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+
+    /**
+     * Only called from test, creates and returns a new {@link SimpleIdlingResource}.
+     */
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +86,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mMedListAdapter = new MedListAdapter(HomeActivity.this);
 
-        mRecyclerView = findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         mLinearLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -68,7 +95,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mMedDbHelper = new MedDbHelper(this);
 
-        mFloatingActionButton = findViewById(R.id.fab);
+        mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
 
 //        listView = findViewById(R.id.list_view);
 
@@ -118,6 +145,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mRecyclerView.addOnItemTouchListener(createItemClickListener(mRecyclerView));
 
+        getIdlingResource();
     }
 
 
@@ -125,23 +153,34 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
         return new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
+                Cursor cursor = mMedListAdapter.entireCursorForHomeActivity();
+                cursor.moveToPosition(position); // get to the right location in the cursor
+                final long idIndex = cursor.getInt(cursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
+                if (view instanceof TakenButton) {
+                    Intent incrementTakenCountIntent = new Intent(HomeActivity.this, MedReminderIntentService.class);
+                    incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
+                    incrementTakenCountIntent.putExtra("id", idIndex);
+                    HomeActivity.this.startService(incrementTakenCountIntent);
+                } else if (view instanceof IgnoreButton){
+                    Intent incrementTakenCountIntent = new Intent(HomeActivity.this, MedReminderIntentService.class);
+                    incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_IGNORE_COUNT);
+                    incrementTakenCountIntent.putExtra("id", idIndex);
+                    HomeActivity.this.startService(incrementTakenCountIntent);
+                } else {
                     Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
-                    Uri currentMedDataUri = returnCurrentMedDataUri(position);
-                    intent.setData(currentMedDataUri);
-                    startActivity(intent);
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-                if (view instanceof LinearLayout) {
-
-            } else {
-                    Intent intent = new Intent(HomeActivity.this, MedFormActivity.class);
                     Uri currentMedDataUri = returnCurrentMedDataUri(position);
                     intent.setData(currentMedDataUri);
                     startActivity(intent);
                 }
             }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                    Intent intent = new Intent(HomeActivity.this, MedFormActivity.class);
+                    Uri currentMedDataUri = returnCurrentMedDataUri(position);
+                    intent.setData(currentMedDataUri);
+                    startActivity(intent);
+                }
         });
 
 }
@@ -273,6 +312,9 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         mMedListAdapter.swapCursor(cursor);
+            if (mIdlingResource != null) {
+                mIdlingResource.setIdleState(true);
+        }
     }
 
     @Override
@@ -284,5 +326,4 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onBackPressed() {
         moveTaskToBack(true);
     }
-
 }

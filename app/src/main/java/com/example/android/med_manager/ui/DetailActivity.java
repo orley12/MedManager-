@@ -1,4 +1,4 @@
-package com.example.android.med_manager;
+package com.example.android.med_manager.ui;
 
 
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.med_manager.R;
 import com.example.android.med_manager.data.MedContract.MedEntry;
 
 import java.text.SimpleDateFormat;
@@ -67,18 +68,18 @@ public class DetailActivity extends AppCompatActivity implements LoaderManager.L
 
 //        final long id = ContentUris.parseId(mCurrentMedUri);
 
-        mMedNameTextView = findViewById(R.id.med_name_detail);
-        mMedTypeImageView = findViewById(R.id.med_type_image_detail);
-        mMedTypeTextView = findViewById(R.id.med_type_text_detail);
-        mMedDescriptionTextView = findViewById(R.id.med_description_detail);
-        mMedDosageTextView = findViewById(R.id.med_dosage_detail);
-        mMedIntervalTextView = findViewById(R.id.med_interval_detail);
-        mMedStartDateTextView = findViewById(R.id.start_date_detail);
-        mMedEndDateTextView = findViewById(R.id.end_date_detail);
-        mMedNameSmallTextView = findViewById(R.id.med_name_small_detail);
-        mTakenTextView = findViewById(R.id.taken_count_text_view);
-        mIgnoreTextView = findViewById(R.id.ignore_count_text_view);
-        mStartTimeTextView = findViewById(R.id.start_time);
+        mMedNameTextView = (TextView) findViewById(R.id.med_name_detail);
+        mMedTypeImageView = (ImageView) findViewById(R.id.med_type_image_detail);
+        mMedTypeTextView = (TextView) findViewById(R.id.med_type_text_detail);
+        mMedDescriptionTextView = (TextView) findViewById(R.id.med_description_detail);
+        mMedDosageTextView = (TextView) findViewById(R.id.med_dosage_detail);
+        mMedIntervalTextView = (TextView) findViewById(R.id.med_interval_detail);
+        mMedStartDateTextView = (TextView) findViewById(R.id.start_date_detail);
+        mMedEndDateTextView = (TextView) findViewById(R.id.end_date_detail);
+        mMedNameSmallTextView = (TextView) findViewById(R.id.med_name_small_detail);
+        mTakenTextView = (TextView) findViewById(R.id.taken_count_text_view);
+        mIgnoreTextView = (TextView) findViewById(R.id.ignore_count_text_view);
+        mStartTimeTextView = (TextView) findViewById(R.id.start_time);
 
         getSupportLoaderManager().initLoader(101, null, this);
 

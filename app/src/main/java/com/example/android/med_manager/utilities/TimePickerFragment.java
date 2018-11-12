@@ -1,4 +1,4 @@
-package com.example.android.med_manager;
+package com.example.android.med_manager.utilities;
 
 import android.app.Dialog;
 import android.app.DialogFragment;

@@ -2,7 +2,9 @@ package com.example.android.med_manager.ui;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.android.med_manager.R;
-import com.example.android.med_manager.data.MedContract.ProfileEntry;
+import com.example.android.med_manager.customViews.SignUpButton;
 import com.example.android.med_manager.utilities.PreferenceUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -23,14 +27,19 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.*;
+import static com.example.android.med_manager.utilities.LoginUtils.*;
 
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
+    public static final String PROFILE = "profile";
     private static final int REQUEST_CODE_SIGN_IN = 1;
-    private static final String LOG_TAG = LoginActivity.class.getSimpleName();
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     GoogleSignInClient mGoogleSigninClient;
+
+    Context context = LoginActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +70,60 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         to it */
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
+
+        final EditText emailInputField = findViewById(R.id.username_edit_text);
+        final EditText passwordInputField = findViewById(R.id.password_editText);
+
+        Button mLoginButton = findViewById(R.id.login_button);
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = emailInputField.getText().toString();
+                String inputtedPassword = passwordInputField.getText().toString();
+                authenticateUser(email, inputtedPassword);
+            }
+        });
+
+        SignUpButton signUpButton = findViewById(R.id.email_sign_up_button);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchProfileActivity();
+            }
+        });
     }
+
+    private void authenticateUser(String email, String inputtedPassword ){
+        Cursor cursor = getUserData(context, PROFILE_COLUMN_EMAIL, email);
+
+        if ((cursor.getCount() < 1)) {
+            Toast.makeText(context, "Your account doesn't exist",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            cursor.moveToFirst(); // get to the right location in the cursor
+            String passwordInDatabase = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_PASSWORD));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_NAME));
+            long userId = cursor.getInt(cursor.getColumnIndexOrThrow(PROFILE_DB_DEFAULT_ID));
+            cursor.close();
+
+            if(passwordInDatabase == null || passwordInDatabase.isEmpty()){
+                Toast.makeText(context, "You don't have a password, Please login with Google",
+                        Toast.LENGTH_SHORT).show();
+            } else  {
+
+                if ((comparePasswords(passwordInDatabase, inputtedPassword))) {
+                    PreferenceUtils.setLoggedInUser(this, userId);
+                    launchLoginActivity();
+                    Toast.makeText(context, "Welcome " + name,
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Wrong password inputted",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
 
     /*this method helps us hide the statusBar*/
     private void hindStatusBar() {
@@ -77,52 +139,63 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         * GoogleSignInAccount object if the user is signedIn else it returns null if not null we
         * lunch the HomeActivity as parent activity*/
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+        int id = (int) PreferenceUtils.getLoggedInUser(this);
+
         if (account != null) {
-            launchHomeActivity();
+            launchLoginActivity();
+        } else if(id != 0){
+            launchLoginActivity();
         }
     }
 
     private void getUsersInfo(GoogleSignInAccount account) {
         if (account == null){
-            Toast.makeText(this,"No Accout Info Found",Toast.LENGTH_SHORT);
+            Toast.makeText(this,"No Account Info Found",Toast.LENGTH_SHORT)
+            .show();
         }else {
             String usersEmail = account.getEmail();
             String usersName = account.getGivenName();
             String usersFamilyName = account.getFamilyName();
             String usersId = account.getId();
-            Uri usersPhotoUrl = account.getPhotoUrl();
+            String usersPhotoUrl = (account.getPhotoUrl() != null) ? account.getPhotoUrl().toString() : "";
             String usersDisplayName = account.getDisplayName();
 
-            Log.i(LOG_TAG, "THE LOGS YOU LOOKING FOR" + usersEmail + usersName +
+            Log.i(TAG, "THE LOGS YOU LOOKING FOR" + usersEmail + usersName +
                     usersFamilyName + usersId + usersDisplayName + "  \n   " + usersPhotoUrl);
 
             ContentValues contentValues = new ContentValues();
-            contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, usersEmail);
-            contentValues.put(ProfileEntry.PROFILE_COLUMN_NAME, usersName);
-            contentValues.put(ProfileEntry.PROFILE_SURNAME_NAME, usersFamilyName);
-            contentValues.put(ProfileEntry.PROFILE_ID_GOOGLE, usersId);
-            contentValues.put(ProfileEntry.PROFILE_USER_NAME, usersDisplayName);
-            contentValues.put(ProfileEntry.PROFILE_COLUMN_PASSWORD, "");
-            contentValues.put(ProfileEntry.COLUMN_USER_PHOTO_URI, usersPhotoUrl.toString());
+            contentValues.put(PROFILE_COLUMN_EMAIL, usersEmail);
+            contentValues.put(PROFILE_COLUMN_NAME, usersName);
+            contentValues.put(PROFILE_SURNAME_NAME, usersFamilyName);
+            contentValues.put(PROFILE_ID_GOOGLE, usersId);
+            contentValues.put(PROFILE_USER_NAME, usersDisplayName);
+            contentValues.put(PROFILE_COLUMN_PASSWORD, "");
+            contentValues.put(COLUMN_USER_PHOTO_URI, usersPhotoUrl);
 
-            Uri returnedUri = getContentResolver().insert(ProfileEntry.CONTENT_URI, contentValues);
+            Uri returnedUri = getContentResolver().insert(CONTENT_URI, contentValues);
             PreferenceUtils.setLoggedInUser(this, ContentUris.parseId(returnedUri));
 
-            launchHomeActivity();
+            launchLoginActivity();
         }
     }
 
-    public void launchHomeActivity() {
+    public void launchLoginActivity() {
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
+    }
+
+    public void launchProfileActivity() {
+        Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+        intent.putExtra(ProfileActivity.SIGN_UP, "signUp");
         startActivity(intent);
     }
 
     /*onClick on the  signIn button it calls the signIn() method */
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.sign_in_button:
-                signIn();
+        if (view.getId() == R.id.sign_in_button) {
+            signIn();
         }
     }
 
@@ -152,12 +225,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             getUsersInfo(account);
-            Log.i(LOG_TAG, "sigin successful code = " + account.getPhotoUrl());
+            Toast.makeText(context, "Welcome " + account.getGivenName(),
+                    Toast.LENGTH_SHORT).show();
         } catch (ApiException e) {
             e.printStackTrace();
-            Log.w(LOG_TAG, "sigin failed code = " + e.getStatusCode());
+            Toast.makeText(context, "signIn failed, ensure your internet connection is turned on" ,
+                    Toast.LENGTH_SHORT).show();
             getUsersInfo(null);
         }
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!getIntent().hasExtra(PROFILE)){
+            moveTaskToBack(true);
+        } else {
+            moveTaskToBack(false);
+        }
     }
 }

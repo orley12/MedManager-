@@ -10,23 +10,23 @@ import android.preference.PreferenceManager;
 
 public class PreferenceUtils {
 
-    private static String KEY_ACCT_ID;
+    private static String KEY_ACCT_ID = "key_account_id";
 
     synchronized public static void setLoggedInUser(Context context, long id) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(PreferenceUtils.KEY_ACCT_ID, id);
+        editor.putLong(KEY_ACCT_ID, id);
         editor.apply();
     }
 
     synchronized public static long  getLoggedInUser(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getLong(PreferenceUtils.KEY_ACCT_ID, 0);
+        return prefs.getLong(KEY_ACCT_ID, 0);
     }
     synchronized public static void setLoggedOut(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putLong(PreferenceUtils.KEY_ACCT_ID, 0);
+        editor.remove(KEY_ACCT_ID);
         editor.apply();
     }
 

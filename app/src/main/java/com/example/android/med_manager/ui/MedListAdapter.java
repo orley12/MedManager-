@@ -64,7 +64,7 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
 //                incrementTakenCountIntent.setAction(ReminderTasks.ACTION_INCREMENT_MED_TAKEN_COUNT);
 //                incrementTakenCountIntent.putExtra("id", idIndex);
 //                mContext.startService(incrementTakenCountIntent);
-//                Log.i(LOG_TAG, "ALSO CALLED WHAT IS HERE :" + idIndex);
+//                Log.i(TAG, "ALSO CALLED WHAT IS HERE :" + idIndex);
 //            }
 //        });
 
@@ -72,7 +72,7 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
 //            @Override
 //            public void onClick(View view) {
 //
-////                Log.i(LOG_TAG, "CALLED IGNORE WHAT IS HERE :" + position);
+////                Log.i(TAG, "CALLED IGNORE WHAT IS HERE :" + position);
 //            }
 //        });
     }
@@ -87,7 +87,7 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
         holder.medEndTextView.setText(endDateSubString);
         medTypeImage(holder, type);
     }
-    //        Log.i(LOG_TAG,"LENGTH :" + startDateSubString);
+    //        Log.i(TAG,"LENGTH :" + startDateSubString);
 
     private String reduceDateLength(String dateValue){
         return dateValue.substring(0,dateValue.length()-5);

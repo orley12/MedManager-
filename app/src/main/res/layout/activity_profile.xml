@@ -28,6 +28,7 @@
             android:layout_height="100dp"
             android:gravity="center"
             tools:text="ola"
+            android:background="#70F5F5"
             android:textAlignment="center"
             android:textColor="#ffffff"
             android:textSize="70sp" />

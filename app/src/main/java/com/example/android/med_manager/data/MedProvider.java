@@ -47,7 +47,7 @@ public class MedProvider extends ContentProvider {
         switch (match) {
             case ENTIRE_PROFILE_TABLE:
                 cursor = database.query(ProfileEntry.PROFILE_TABLE_NAME, projection,
-                        null, null, null, null, null);
+                        selection, selectionArgs, null, null, null);
                 break;
             case ENTIRE_MEDICATION_TABLE:
                 cursor = database.query(MedEntry.MED_TABLE_NAME, projection,

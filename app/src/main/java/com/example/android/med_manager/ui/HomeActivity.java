@@ -1,6 +1,5 @@
 package com.example.android.med_manager.ui;
 
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,16 +18,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 
-import com.example.android.med_manager.customViews.IgnoreButton;
 import com.example.android.med_manager.R;
-import com.example.android.med_manager.utilities.RecyclerItemClickListener;
 import com.example.android.med_manager.SearchAdapter;
+import com.example.android.med_manager.customViews.IgnoreButton;
 import com.example.android.med_manager.customViews.TakenButton;
 import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.data.MedDbHelper;
@@ -36,16 +32,14 @@ import com.example.android.med_manager.idlingResource.SimpleIdlingResource;
 import com.example.android.med_manager.sync.MedReminderIntentService;
 import com.example.android.med_manager.sync.NotificationScheduler;
 import com.example.android.med_manager.sync.ReminderTasks;
+import com.example.android.med_manager.utilities.RecyclerItemClickListener;
 
-//import android.support.v4.content.Loader;
 
 public class HomeActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    public static final String LOG_TAG = HomeActivity.class.getSimpleName();
+    public static final String TAG = HomeActivity.class.getSimpleName();
 
     private static final int MED_TASK_LOADER_ID = 1;
-
-    public static long TIME_INTERVAL;
 
     MedListAdapter mMedListAdapter;
 
@@ -57,11 +51,7 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
     long mId;
 
-    SearchView mSearchView;
-
     FloatingActionButton mFloatingActionButton;
-
-    ListView listView;
 
     // The Idling Resource which will be null in production.
     @Nullable
@@ -97,10 +87,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
 
         mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
 
-//        listView = findViewById(R.id.list_view);
-
-//        mRecyclerView.setVisibility(View.GONE);
-
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,7 +112,6 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 //[Hint] Use getTag (from the adapter code) to get the id of the swiped item
                 // Retrieve the id of the task to delete
                 mId = (long) viewHolder.itemView.getTag();
-                Log.i(LOG_TAG, "onSwiped: " + mId);
                 NotificationScheduler.cancelReminder(HomeActivity.this, mId);
 
                 // Build appropriate uri with String row id appended
@@ -196,37 +181,10 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public boolean onCreatePanelMenu(int featureId, Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
-        mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        mSearchView.setSubmitButtonEnabled(true);
-        mSearchView.setOnQueryTextListener(onQueryTextListener);
         return true;
     }
-    private SearchView.OnQueryTextListener onQueryTextListener =
-            new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    Cursor medQuery = getListOfMedNames(query);
-                    SearchAdapter cursorAdapter = new SearchAdapter
-                            (HomeActivity.this, medQuery,mSearchView );
-                    mSearchView.setSuggestionsAdapter(cursorAdapter);
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    Cursor medQuery = getListOfMedNames(newText);
-                    SearchAdapter cursorAdapter = new SearchAdapter
-                            (HomeActivity.this, medQuery,mSearchView );
-                    mSearchView.setSuggestionsAdapter(cursorAdapter);
-                    return true;
-                }
-            };
 
     public Cursor getListOfMedNames(String searchText) {
-
-        Cursor cursor = null;
-        ContentResolver contentResolver = getContentResolver();
-
         String[] mProjection = {MedEntry.MED_DB_DEFAULT_ID,
                 MedEntry.MED_COLUMN_NAME,
                 MedEntry.MED_COLUMN_DOSAGE,
@@ -234,13 +192,13 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
                 MedEntry.MED_COLUMN_END_DATE,
                 MedEntry.MED_COLUMN_TYPE};
 
-        Uri uri = MedEntry.CONTENT_URI;
-
         String selection = MedEntry.MED_COLUMN_NAME + "=?";
         String[] selectionArgs = {String.valueOf(searchText)};
 
-        cursor = contentResolver.query(uri, mProjection, selection, selectionArgs, null);
-//        cursor.close();
+        Cursor cursor = getContentResolver().query(MedEntry.CONTENT_URI, mProjection, selection, selectionArgs, null);
+
+        assert cursor != null;
+        cursor.close();
 
         return cursor;
 
@@ -260,16 +218,10 @@ public class HomeActivity extends AppCompatActivity implements LoaderManager.Loa
             case R.id.action_delete_all_meds:
                 deleteAllMedEntries();
                 break;
-            case R.id.action_search:
-                removeRecyclerView();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void removeRecyclerView(){
-        mRecyclerView.setVisibility(View.GONE);
-    }
     private void launchProfileActivity() {
         Intent launchProfileActivityIntent = new Intent(HomeActivity.this, ProfileActivity.class);
         startActivity(launchProfileActivityIntent);

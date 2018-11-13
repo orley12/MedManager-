@@ -1,6 +1,9 @@
 package com.example.android.med_manager.ui;
+
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,8 +13,8 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.android.med_manager.R;
-import com.example.android.med_manager.data.MedContract.MedEntry;
 import com.example.android.med_manager.data.MedContract.ProfileEntry;
+import com.example.android.med_manager.utilities.PreferenceUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,10 +24,12 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
 
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final int REQUEST_CODE_SIGN_IN = 1;
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
+
     GoogleSignInClient mGoogleSigninClient;
 
     @Override
@@ -56,7 +61,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         to it */
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
-
     }
 
     /*this method helps us hide the statusBar*/
@@ -86,39 +90,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             String usersName = account.getGivenName();
             String usersFamilyName = account.getFamilyName();
             String usersId = account.getId();
+            Uri usersPhotoUrl = account.getPhotoUrl();
             String usersDisplayName = account.getDisplayName();
 
-            Log.i(LOG_TAG, "THE LOGS YOU LOOKING FOR" + usersEmail + usersName + usersFamilyName + usersId + usersDisplayName);
+            Log.i(LOG_TAG, "THE LOGS YOU LOOKING FOR" + usersEmail + usersName +
+                    usersFamilyName + usersId + usersDisplayName + "  \n   " + usersPhotoUrl);
 
-//            ContentValues contentValues = new ContentValues();
-//            contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, "");
-//            contentValues.put(ProfileEntry.PROFILE_COLUMN_NAME, "");
-//            contentValues.put(ProfileEntry.PROFILE_SURNAME_NAME, "");
-//            contentValues.put(ProfileEntry.PROFILE_ID_GOOGLE, "");
-//            contentValues.put(ProfileEntry.PROFILE_USER_NAME, "");
-//
-//            Uri returnedUri = getContentResolver().insert(ProfileEntry.CONTENT_URI, contentValues);
-//            long idValueOfParseUri = ContentUris.parseId(returnedUri);
-//            Log.i(LOG_TAG, "THE ID YOU LOOKING FOR" + idValueOfParseUri);
-//            insertValuesIntoDatabase(idValueOfParseUri, usersEmail, usersName, usersFamilyName, usersId, usersDisplayName);
-//            launchHomeActivity();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, usersEmail);
+            contentValues.put(ProfileEntry.PROFILE_COLUMN_NAME, usersName);
+            contentValues.put(ProfileEntry.PROFILE_SURNAME_NAME, usersFamilyName);
+            contentValues.put(ProfileEntry.PROFILE_ID_GOOGLE, usersId);
+            contentValues.put(ProfileEntry.PROFILE_USER_NAME, usersDisplayName);
+            contentValues.put(ProfileEntry.PROFILE_COLUMN_PASSWORD, "");
+            contentValues.put(ProfileEntry.COLUMN_USER_PHOTO_URI, usersPhotoUrl.toString());
+
+            Uri returnedUri = getContentResolver().insert(ProfileEntry.CONTENT_URI, contentValues);
+            PreferenceUtils.setLoggedInUser(this, ContentUris.parseId(returnedUri));
+
+            launchHomeActivity();
         }
-    }
-
-    public void insertValuesIntoDatabase(long idIndex, String email, String givenName, String familyName, String Id
-            , String displayName) {
-
-        String selection = MedEntry.MED_DB_DEFAULT_ID + "=?";
-        String[] selectionArgs = new String[]{String.valueOf(Long.toString(idIndex))};
-
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(ProfileEntry.PROFILE_COLUMN_EMAIL, email);
-        contentValues.put(ProfileEntry.PROFILE_COLUMN_NAME, givenName);
-        contentValues.put(ProfileEntry.PROFILE_SURNAME_NAME, familyName);
-        contentValues.put(ProfileEntry.PROFILE_ID_GOOGLE, Id);
-        contentValues.put(ProfileEntry.PROFILE_USER_NAME, displayName);
-
-        getContentResolver().update(ProfileEntry.CONTENT_URI, contentValues, selection, selectionArgs);
     }
 
     public void launchHomeActivity() {
@@ -135,8 +126,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     /*Here on the GoogleSignInClient we call the geSignInIntent() this will prompt the user to select
-     * Google account to sign in with */
+         * Google account to sign in with */
     private void signIn() {
         Intent signInIntent = mGoogleSigninClient.getSignInIntent();
         startActivityForResult(signInIntent, REQUEST_CODE_SIGN_IN);
@@ -156,8 +152,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             getUsersInfo(account);
-            if (account == null){
-            }
+            Log.i(LOG_TAG, "sigin successful code = " + account.getPhotoUrl());
         } catch (ApiException e) {
             e.printStackTrace();
             Log.w(LOG_TAG, "sigin failed code = " + e.getStatusCode());

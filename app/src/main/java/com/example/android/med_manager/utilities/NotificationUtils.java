@@ -146,10 +146,10 @@ public class NotificationUtils {
                 ACTION_TAKEN_PENDING_INTENT_ID,
                 incrementMedTakenCountIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
-        Action drinkWaterAction = new Action(R.drawable.ic_small_capsule_for_card_i,
+        Action takenReminderAction = new Action(R.drawable.ic_small_capsule_for_card_i,
                 "I did it!",
                 incrementMedTakenPendingIntent);
-        return drinkWaterAction;
+        return takenReminderAction;
     }
 
     private static PendingIntent contentIntent(Context context) {

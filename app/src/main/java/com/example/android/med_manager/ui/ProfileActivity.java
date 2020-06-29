@@ -13,9 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -31,9 +29,20 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.android.med_manager.R;
 import com.example.android.med_manager.utilities.PreferenceUtils;
-import com.google.android.gms.auth.api.signin.*;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
-import static com.example.android.med_manager.data.MedContract.ProfileEntry.*;
+import java.util.regex.Pattern;
+
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.COLUMN_USER_PHOTO_URI;
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.CONTENT_URI;
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.PROFILE_COLUMN_EMAIL;
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.PROFILE_COLUMN_NAME;
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.PROFILE_COLUMN_PASSWORD;
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.PROFILE_DB_DEFAULT_ID;
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.PROFILE_SURNAME_NAME;
+import static com.example.android.med_manager.data.MedContract.ProfileEntry.PROFILE_USER_NAME;
 import static com.example.android.med_manager.utilities.LoginUtils.getUserData;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -118,7 +127,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         if (isComingFromSignUp){
-            setTitle(R.id.signup);
+            setTitle(R.string.signup);
         }
 
         GoogleSignInOptions mGoogleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -135,25 +144,25 @@ public class ProfileActivity extends AppCompatActivity {
         Cursor cursor = getUserData(ProfileActivity.this, PROFILE_DB_DEFAULT_ID, String.valueOf(id));
 
         cursor.moveToFirst();
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_NAME));
-            String surname = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_SURNAME_NAME));
-            String username = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_USER_NAME));
-            String email = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_EMAIL));
-            String password = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_PASSWORD));
-            mUserPhotoUri = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_PHOTO_URI));
+        String name = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_NAME));
+        String surname = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_SURNAME_NAME));
+        String username = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_USER_NAME));
+        String email = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_EMAIL));
+        String password = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_PASSWORD));
+        mUserPhotoUri = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_USER_PHOTO_URI));
 
-            cursor.close();
-            mNameEditText.setText(name);
-            mSurnameEditText.setText(surname);
-            mUsernameEditText.setText(username);
-            mEmailEditText.setText(email);
-            mPassWordEditText.setText(password);
-            mMainNameEditText.setText(name);
-            if (mUserPhotoUri.isEmpty()) {
-                mAbbreviatedNameTextView.setText(name.substring(0, 1) + surname.substring(0, 1));
-            } else {
-                setUserImage(Uri.parse(mUserPhotoUri));
-            }
+        cursor.close();
+        mNameEditText.setText(name);
+        mSurnameEditText.setText(surname);
+        mUsernameEditText.setText(username);
+        mEmailEditText.setText(email);
+        mPassWordEditText.setText(password);
+        mMainNameEditText.setText(name);
+        if (mUserPhotoUri.isEmpty()) {
+            mAbbreviatedNameTextView.setText(name.substring(0, 1) + surname.substring(0, 1));
+        } else {
+            setUserImage(Uri.parse(mUserPhotoUri));
+        }
     }
 
     public void dbUpdateUserData() {
@@ -192,10 +201,23 @@ public class ProfileActivity extends AppCompatActivity {
         String email = mEmailEditText.getText().toString().trim();
         String password = mPassWordEditText.getText().toString().trim();
 
+        if(!isEmailValid(email)){
+            Toast.makeText(ProfileActivity.this, "Invalid Email",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(password.isEmpty() || password.length() < 6){
+            Toast.makeText(ProfileActivity.this, "Password as to be at least 6 characters",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         Cursor cursor = getUserData(ProfileActivity.this, PROFILE_COLUMN_EMAIL, email);
         if ((cursor.getCount() > 0)) {
             Toast.makeText(ProfileActivity.this, "Your account already exist, please login",
                     Toast.LENGTH_SHORT).show();
+            return;
         }
 
         ContentValues contentValues = new ContentValues();
@@ -215,6 +237,11 @@ public class ProfileActivity extends AppCompatActivity {
         Toast.makeText(ProfileActivity.this,
                 "Please log in with your credentials",
                 Toast.LENGTH_SHORT).show();
+    }
+
+    public static boolean isEmailValid(String email) {
+        final Pattern EMAIL_REGEX = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
+        return EMAIL_REGEX.matcher(email).matches();
     }
 
     private long insertProfile(ContentValues contentValues) {

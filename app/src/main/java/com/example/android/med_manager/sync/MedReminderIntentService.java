@@ -52,7 +52,7 @@ public class MedReminderIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         String action = intent.getAction();
         if (ACTION_UPDATE_MED_MANAGER_WIDGET.equals(action)) {
-            handleActionUpdatePlantWidgets();
+            handleWidgetActions();
         }else {
             Bundle bundle = intent.getExtras();
             long id = bundle.getLong("id");
@@ -62,7 +62,7 @@ public class MedReminderIntentService extends IntentService {
         }
     }
 
-    private void handleActionUpdatePlantWidgets() {
+    private void handleWidgetActions() {
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, MedWidgetProvider.class));

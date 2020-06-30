@@ -21,12 +21,12 @@ public class MedDbHelper extends SQLiteOpenHelper {
             ProfileEntry.PROFILE_TABLE_NAME + "( " +
             ProfileEntry.PROFILE_DB_DEFAULT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
             ProfileEntry.PROFILE_COLUMN_EMAIL + " TEXT DEFAULT ''," +
-            ProfileEntry.PROFILE_COLUMN_NAME + " TEXT DEFAULT ''," +
-            ProfileEntry.PROFILE_SURNAME_NAME + " TEXT DEFAULT ''," +
+            ProfileEntry.PROFILE_COLUMN_FIRST_NAME + " TEXT DEFAULT ''," +
+            ProfileEntry.PROFILE_COLUMN_LAST_NAME + " TEXT DEFAULT ''," +
             ProfileEntry.PROFILE_ID_GOOGLE + " TEXT DEFAULT ''," +
-            ProfileEntry.PROFILE_USER_NAME + " TEXT DEFAULT ''," +
+            ProfileEntry.PROFILE_COLUMN_USER_NAME + " TEXT DEFAULT ''," +
             ProfileEntry.PROFILE_COLUMN_PASSWORD + " TEXT DEFAULT ''," +
-            ProfileEntry.COLUMN_USER_PHOTO_URI + " TEXT DEFAULT ''," +
+            ProfileEntry.PROFILE_COLUMN_USER_PHOTO_URI + " TEXT DEFAULT ''," +
             " UNIQUE (" + ProfileEntry.PROFILE_COLUMN_EMAIL + ") ON CONFLICT REPLACE);";
 
     public static final String CREATE_MEDICATION_ENTRIES = "CREATE TABLE " +

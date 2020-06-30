@@ -17,7 +17,7 @@ import android.widget.RemoteViews;
 import com.example.android.med_manager.sync.ListWidgetService;
 import com.example.android.med_manager.sync.MedReminderIntentService;
 import com.example.android.med_manager.sync.ReminderTasks;
-import com.example.android.med_manager.ui.DetailActivity;
+import com.example.android.med_manager.detail.DetailActivity;
 import com.example.android.med_manager.ui.HomeActivity;
 
 import java.text.SimpleDateFormat;
@@ -74,7 +74,6 @@ public class MedWidgetProvider extends AppWidgetProvider {
 
     private static RemoteViews getSingleMedRemoteView(Context context) {
 
-        //Query to get the plant that's most in need for water (last watered)
         Cursor cursor = context.getContentResolver().query(
                 CONTENT_URI,
                 null,
@@ -161,10 +160,10 @@ public class MedWidgetProvider extends AppWidgetProvider {
                 medImage = R.drawable.ic_inhaler;
                 break;
             case MED_TYPE_DROPS:
-                medImage = R.drawable.ic_eye_drop;
+                medImage = R.drawable.ic_drops;
                 break;
             case MED_TYPE_OINTMENT:
-                medImage = R.drawable.ic_ointiment;
+                medImage = R.drawable.ic_ointment;
                 break;
             case MED_TYPE_INJECTION:
                 medImage = R.drawable.ic_injection;

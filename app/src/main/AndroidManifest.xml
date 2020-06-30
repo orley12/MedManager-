@@ -27,13 +27,13 @@
             android:name=".ui.MedFormActivity"
             android:label="Med Form" />
         <activity
-            android:name=".ui.DetailActivity"
+            android:name=".detail.DetailActivity"
             android:label="Detail" />
         <activity
             android:name=".ui.HomeActivity"
             android:label="Home" />
         <activity
-            android:name=".ui.ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:label="Profile" />
 
 

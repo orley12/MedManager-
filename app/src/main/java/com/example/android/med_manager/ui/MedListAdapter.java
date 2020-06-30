@@ -121,12 +121,12 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
                 holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.inhaler_color));
                 break;
             case MedEntry.MED_TYPE_DROPS:
-                holder.medTypeImageView.setImageResource(R.drawable.ic_eye_drop);
-                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.eye_drop_color));
+                holder.medTypeImageView.setImageResource(R.drawable.ic_drops);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.drops_color));
                 break;
             case MedEntry.MED_TYPE_OINTMENT:
-                holder.medTypeImageView.setImageResource(R.drawable.ic_ointiment);
-                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.onitement_color));
+                holder.medTypeImageView.setImageResource(R.drawable.ic_ointment);
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.ointment_color));
                 break;
             case MedEntry.MED_TYPE_INJECTION:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_injection);
@@ -134,7 +134,7 @@ public class MedListAdapter extends RecyclerView.Adapter<MedListAdapter.MedViewH
                 break;
             case MedEntry.MED_TYPE_OTHERS:
                 holder.medTypeImageView.setImageResource(R.drawable.ic_other_meds);
-                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.others_color));
+                holder.medTypeImageView.setBackgroundColor(mContext.getResources().getColor(R.color.other_meds_color));
                 break;
         }
     }

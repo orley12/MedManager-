@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import com.example.android.med_manager.R;
 import com.example.android.med_manager.customViews.SignUpButton;
+import com.example.android.med_manager.profile.ProfileActivity;
+import com.example.android.med_manager.sync.NotificationScheduler;
 import com.example.android.med_manager.utilities.PreferenceUtils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -44,6 +46,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        Log.d(TAG, "onCreate: ========>heightPixels " + displayMetrics.heightPixels);
+//        Log.d(TAG, "onCreate: ========>widthPixels " + displayMetrics.widthPixels);
+
         hindStatusBar();
         this.setContentView(R.layout.activity_login);
         /* the GoogleSignInOptions helps our this app request the user data required by this app for
@@ -94,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void authenticateUser(String email, String inputtedPassword ){
-        Cursor cursor = getUserData(context, PROFILE_COLUMN_EMAIL, email);
+        Cursor cursor = getUserDataFormDataBase(context, PROFILE_COLUMN_EMAIL, email);
 
         if ((cursor.getCount() < 1)) {
             Toast.makeText(context, "Your account doesn't exist",
@@ -102,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         } else {
             cursor.moveToFirst(); // get to the right location in the cursor
             String passwordInDatabase = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_PASSWORD));
-            String name = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_NAME));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(PROFILE_COLUMN_FIRST_NAME));
             long userId = cursor.getInt(cursor.getColumnIndexOrThrow(PROFILE_DB_DEFAULT_ID));
             cursor.close();
 
@@ -112,6 +119,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } else  {
 
                 if ((comparePasswords(passwordInDatabase, inputtedPassword))) {
+                    NotificationScheduler.reRegisterAlarms(this);
                     PreferenceUtils.setLoggedInUser(this, userId);
                     launchLoginActivity();
                     Toast.makeText(context, "Welcome " + name,
@@ -166,12 +174,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             ContentValues contentValues = new ContentValues();
             contentValues.put(PROFILE_COLUMN_EMAIL, usersEmail);
-            contentValues.put(PROFILE_COLUMN_NAME, usersName);
-            contentValues.put(PROFILE_SURNAME_NAME, usersFamilyName);
+            contentValues.put(PROFILE_COLUMN_FIRST_NAME, usersName);
+            contentValues.put(PROFILE_COLUMN_LAST_NAME, usersFamilyName);
             contentValues.put(PROFILE_ID_GOOGLE, usersId);
-            contentValues.put(PROFILE_USER_NAME, usersDisplayName);
+            contentValues.put(PROFILE_COLUMN_USER_NAME, usersDisplayName);
             contentValues.put(PROFILE_COLUMN_PASSWORD, "");
-            contentValues.put(COLUMN_USER_PHOTO_URI, usersPhotoUrl);
+            contentValues.put(PROFILE_COLUMN_USER_PHOTO_URI, usersPhotoUrl);
 
             Uri returnedUri = getContentResolver().insert(CONTENT_URI, contentValues);
             PreferenceUtils.setLoggedInUser(this, ContentUris.parseId(returnedUri));

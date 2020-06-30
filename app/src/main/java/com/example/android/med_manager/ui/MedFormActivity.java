@@ -350,10 +350,10 @@ public class MedFormActivity extends AppCompatActivity implements LoaderManager.
         int newUri = getContentResolver().update(MedEntry.CONTENT_URI, contentValues, selection, selectionArgs);
 
         if (newUri > 0) {
-            Toast.makeText(this, "Pets Update Successful"
+            Toast.makeText(this, "Medication info as been updated"
                     + ContentUris.parseId(mCurrentMedUri), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Pets Update Failed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Unable to update Medication Info", Toast.LENGTH_SHORT).show();
         }
         long idValueOfParseUri = ContentUris.parseId(mCurrentMedUri);
                     NotificationScheduler.cancelReminder(MedFormActivity.this, idValueOfParseUri);

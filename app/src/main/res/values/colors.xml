@@ -12,7 +12,7 @@
     <color name="syrup_color">#FFA234</color>
     <color name="inhaler_color">#A4C639</color>
     <color name="injection_color">#1C262F</color>
-    <color name="eye_drop_color">#F24E1E</color>
-    <color name="onitement_color">#D3AA02</color>
-    <color name="others_color">#2D1740</color>
+    <color name="drops_color">#F24E1E</color>
+    <color name="ointment_color">#D3AA02</color>
+    <color name="other_meds_color">#2D1740</color>
 </resources>

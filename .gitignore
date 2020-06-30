@@ -7,6 +7,6 @@
 /build
 /captures
 .externalNativeBuild
-/app/src/main/java/com/example/android/med_manager/SearchAdapter
-/app/src/main/java/com/example/android/med_manager/utilities/FileUtils.java
-/app/src\main/java/com/example/android/med_manager/utilities/ImageUtils.java
+SearchAdapter
+FileUtils.java
+ImageUtils.java

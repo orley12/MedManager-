@@ -120,10 +120,10 @@ public class ListWidgetService extends RemoteViewsService {
                     medImage = R.drawable.ic_inhaler;
                     break;
                 case MED_TYPE_DROPS:
-                    medImage = R.drawable.ic_eye_drop;
+                    medImage = R.drawable.ic_drops;
                     break;
                 case MED_TYPE_OINTMENT:
-                    medImage = R.drawable.ic_ointiment;
+                    medImage = R.drawable.ic_ointment;
                     break;
                 case MED_TYPE_INJECTION:
                     medImage = R.drawable.ic_injection;

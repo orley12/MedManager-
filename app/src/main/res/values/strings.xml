@@ -22,7 +22,7 @@
     <string name="action_delete">Delete</string>
     <string name="action_search">Search</string>
     <string name="user_name">Username</string>
-    <string name="id">Id</string>
+    <string name="photo">photo</string>
     <string name="email">Email</string>
     <string name="first_name">Firstname</string>
     <string name="lastname">Lastname</string>

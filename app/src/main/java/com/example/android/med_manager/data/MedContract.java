@@ -25,12 +25,12 @@ public class MedContract {
 
         public static final String PROFILE_DB_DEFAULT_ID = BaseColumns._ID;
         public static final String PROFILE_TABLE_NAME = "profile";
-        public static final String COLUMN_USER_PHOTO_URI = "photo_url";
+        public static final String PROFILE_COLUMN_USER_PHOTO_URI = "photo_url";
         public static final String PROFILE_COLUMN_EMAIL = "email";
-        public static final String PROFILE_COLUMN_NAME = "name";
-        public static final String PROFILE_SURNAME_NAME = "surname";
+        public static final String PROFILE_COLUMN_FIRST_NAME = "name";
+        public static final String PROFILE_COLUMN_LAST_NAME = "surname";
         public static final String PROFILE_ID_GOOGLE = "id";
-        public static final String PROFILE_USER_NAME = "username";
+        public static final String PROFILE_COLUMN_USER_NAME = "username";
         public static final String PROFILE_COLUMN_PASSWORD = "password";
         public static final Uri CONTENT_URI = Uri.withAppendedPath(Uri.parse(BASE_CONTENT_URI), PROFILE_PATH);
 

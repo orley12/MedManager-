@@ -71,7 +71,39 @@ public class NotificationScheduler
         PendingIntent pendingIntent = PendingIntent.getService(context, (int) id, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
         Log.i(TAG, "cancelReminder: " + id);
             am.cancel(pendingIntent);
-//        pendingIntent.cancel();
+        pendingIntent.cancel();
+    }
+
+    public static void reRegisterAlarms(Context context){
+        String[] projection = {
+                MedEntry.MED_DB_DEFAULT_ID,
+        };
+        Cursor mCursor = context.getContentResolver().query(MedEntry.CONTENT_URI,projection,
+                null, null, null);
+        if (mCursor != null && mCursor.getCount() > 0) {
+        while (mCursor.moveToNext()) {
+                long idIndex = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
+                NotificationScheduler.getId(context, idIndex);
+            }
+        }
+        assert mCursor != null;
+        mCursor.close();
+    }
+
+    public static void unRegisterAlarms(Context context){
+        String[] projection = {
+                MedEntry.MED_DB_DEFAULT_ID,
+        };
+        Cursor mCursor = context.getContentResolver().query(MedEntry.CONTENT_URI,projection,
+                null, null, null);
+        if (mCursor != null && mCursor.getCount() > 0) {
+            while (mCursor.moveToNext()) {
+                long idIndex = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
+                NotificationScheduler.cancelReminder(context, idIndex);
+            }
+        }
+        assert mCursor != null;
+        mCursor.close();
     }
 
     public static void getId(Context context, long idFromReturnedUri) {

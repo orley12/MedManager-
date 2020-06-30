@@ -13,7 +13,7 @@
 //import android.widget.Toast;
 //
 //import com.example.android.med_manager.data.MedContract.MedEntry;
-//import com.example.android.med_manager.ui.DetailActivity;
+//import com.example.android.med_manager.detail.DetailActivity;
 //
 ///**
 // * Created by SOLARIN O. OLUBAYODE on 18/04/18.

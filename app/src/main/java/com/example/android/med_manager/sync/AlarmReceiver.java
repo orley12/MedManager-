@@ -15,20 +15,20 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
                 // Set the alarm here.
-                reRegisterAlarms(context);
+                NotificationScheduler.reRegisterAlarms(context);
                 Log.d(TAG, "onReceive: MED_MANAGER_BOOT_COMPLETED");
     }
-
-    public void reRegisterAlarms(Context context){
-        String[] projection = {
-                MedEntry.MED_DB_DEFAULT_ID,
-        };
-        Cursor mCursor = context.getContentResolver().query(MedEntry.CONTENT_URI,projection,
-                null, null, null);
-            while (mCursor.moveToNext()) {
-                long idIndex = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
-                NotificationScheduler.getId(context, idIndex);
-            }
-        mCursor.close();
-    }
+//
+//    public void reRegisterAlarms(Context context){
+//        String[] projection = {
+//                MedEntry.MED_DB_DEFAULT_ID,
+//        };
+//        Cursor mCursor = context.getContentResolver().query(MedEntry.CONTENT_URI,projection,
+//                null, null, null);
+//            while (mCursor.moveToNext()) {
+//                long idIndex = mCursor.getLong(mCursor.getColumnIndexOrThrow(MedEntry.MED_DB_DEFAULT_ID));
+//                NotificationScheduler.getId(context, idIndex);
+//            }
+//        mCursor.close();
+//    }
 }

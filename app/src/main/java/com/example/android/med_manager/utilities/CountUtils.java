@@ -12,8 +12,8 @@ import com.example.android.med_manager.data.MedContract.MedEntry;
  * Created by SOLARIN O. OLUBAYODE on 25/03/18.
  */
 
-public class CountUtilities {
-    public static final String TAG="CountUtilities";
+public class CountUtils {
+    public static final String TAG="CountUtils";
 
 
     public static Cursor getTakenCount(Context context, long id) {
@@ -25,7 +25,7 @@ public class CountUtilities {
     }
 
     public static void incrementTakenCount(Context context, long id) {
-        Cursor gottenCursor = CountUtilities.getTakenCount(context, id);
+        Cursor gottenCursor = CountUtils.getTakenCount(context, id);
         int takenCount = 0;
 
         gottenCursor.moveToFirst();
@@ -56,7 +56,7 @@ public class CountUtilities {
     }
 
     public static void incrementIgnoreCount(Context context, long id) {
-        Cursor ignoreGottenCursor = CountUtilities.getIgnoreCount(context, id);
+        Cursor ignoreGottenCursor = CountUtils.getIgnoreCount(context, id);
         int ignoreCount = 0;
         ignoreGottenCursor.moveToFirst();
             ignoreCount = ignoreGottenCursor.getInt(ignoreGottenCursor.getColumnIndexOrThrow(MedEntry.MED_COLUMN_IGNORE_COUNT));
@@ -77,7 +77,7 @@ public class CountUtilities {
     }
 
     public static void incrementMedReminderCount(Context context, long id) {
-        Cursor gottenReminderCount = CountUtilities.getMedReminderCount(context, id);
+        Cursor gottenReminderCount = CountUtils.getMedReminderCount(context, id);
         int reminderCount = 0;
         gottenReminderCount.moveToFirst();
             reminderCount = gottenReminderCount.getInt(gottenReminderCount.getColumnIndexOrThrow(MedEntry.MED_COLUMN_REMINDER_COUNT));

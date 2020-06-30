@@ -17,7 +17,7 @@ package com.example.android.med_manager.sync;
 
 import android.content.Context;
 
-import com.example.android.med_manager.utilities.CountUtilities;
+import com.example.android.med_manager.utilities.CountUtils;
 import com.example.android.med_manager.utilities.NotificationUtils;
 
 public class ReminderTasks {
@@ -39,12 +39,12 @@ public class ReminderTasks {
     }
 
     private static void incrementMedTakenCount(Context context, long id) {
-        CountUtilities.incrementTakenCount(context, id);
+        CountUtils.incrementTakenCount(context, id);
         NotificationUtils.clearAllNotifications(context);
     }
 
     private static void incrementMedIgnoreCount(Context context, long id) {
-        CountUtilities.incrementIgnoreCount(context, id);
+        CountUtils.incrementIgnoreCount(context, id);
         NotificationUtils.clearAllNotifications(context);
     }
 

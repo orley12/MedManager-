@@ -66,7 +66,7 @@ public class MedReminderIntentService extends IntentService {
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, MedWidgetProvider.class));
-        //Trigger data update to handle the GridView widgets and force a data refresh
+        //Trigger data update to handle the widgets and force a data refresh
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
         //Now update all widgets
         MedWidgetProvider.updateMedWidget(this, appWidgetManager, appWidgetIds);
@@ -83,7 +83,7 @@ public class MedReminderIntentService extends IntentService {
 
             cursor.close();
 
-        if (NotificationScheduler.todaysDate(endDate) == true){
+        if (NotificationScheduler.todaysDate(endDate)){
             NotificationScheduler.cancelReminder(context,id);
         }
     }

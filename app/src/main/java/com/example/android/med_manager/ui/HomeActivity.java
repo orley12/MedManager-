@@ -16,14 +16,12 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.android.med_manager.R;
-import com.example.android.med_manager.SearchAdapter;
 import com.example.android.med_manager.customViews.IgnoreButton;
 import com.example.android.med_manager.customViews.TakenButton;
 import com.example.android.med_manager.data.MedContract.MedEntry;

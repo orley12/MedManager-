@@ -1,7 +1,3 @@
-## Resources
-
-[Download APK here](https://github.com/orley12/MedManager-/raw/master/apps_apk/MedManager.apk)
-
 ### What does this Application does?
 
 MedManager is an Android Application, that helps with tracking of medications.

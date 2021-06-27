@@ -1,134 +1,144 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/widget_item"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:padding="@dimen/widget_margin">
 
-        <ImageView
-            android:id="@+id/med_type_image_widget"
-            android:layout_width="145dp"
-            android:layout_height="160dp"
-            tools:background="#000000" />
+    <Button
+        android:id="@+id/taken_layout_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Taken"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ignore_layout_widget"
+        app:layout_constraintStart_toEndOf="@+id/med_type_image_widget"
+        app:layout_constraintTop_toBottomOf="@+id/clock_image_widget" />
+
+    <Button
+        android:id="@+id/ignore_layout_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ignore"
+        app:layout_constraintBottom_toBottomOf="@+id/taken_layout_widget"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/taken_layout_widget"
+        app:layout_constraintStart_toEndOf="@+id/taken_layout_widget"
+        app:layout_constraintTop_toTopOf="@+id/taken_layout_widget" />
+
+    <ImageView
+        android:id="@+id/med_type_image_widget"
+        android:layout_width="145dp"
+        android:layout_height="160dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        tools:background="#000000" />
+
+    <ImageView
+        android:id="@+id/clock_image_widget"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_duration"
+        app:layout_constraintStart_toStartOf="@+id/textView26_widget"
+        app:layout_constraintTop_toBottomOf="@+id/textView26_widget" />
 
     <TextView
         android:id="@+id/med_name_widget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/taken_layout_widget"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/taken_layout_widget"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
         android:paddingBottom="0dp"
         android:textSize="35sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/taken_layout_widget"
+        app:layout_constraintStart_toEndOf="@+id/med_type_image_widget"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="Penicillin" />
 
-            <TextView
-                android:id="@+id/textView26_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="Dosage :"
-                android:textSize="20sp"
-                android:layout_alignStart="@+id/med_name_widget"
-               android:layout_below= "@+id/med_name_widget"
-                android:layout_alignLeft="@+id/med_name_widget" />
+    <TextView
+        android:id="@+id/textView26_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Dosage :"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="@+id/med_name_widget"
+        app:layout_constraintStart_toStartOf="@+id/med_name_widget"
+        app:layout_constraintTop_toBottomOf="@+id/med_name_widget" />
 
-            <TextView
-                android:id="@+id/med_dosage_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                tools:text="2"
-                android:textSize="24sp"
-                android:layout_toEndOf="@+id/textView26_widget"
-                android:layout_below= "@+id/med_name_widget"
-                android:layout_toRightOf="@+id/textView26_widget" />
+    <TextView
+        android:id="@+id/med_dosage_widget"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView26_widget"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/textView26_widget"
+        app:layout_constraintStart_toEndOf="@+id/textView26_widget"
+        app:layout_constraintTop_toTopOf="@+id/textView26_widget"
+        tools:text="2" />
 
-            <ImageView
-                android:id="@+id/clock_image_widget"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_duration"
-                android:layout_toEndOf="@+id/textView26_widget"
-                android:layout_toStartOf="@+id/textView26_widget"
-                android:layout_below="@+id/textView26_widget"
-                android:layout_toLeftOf="@+id/textView26_widget"
-                android:layout_toRightOf="@+id/textView26_widget" />
+    <TextView
+        android:id="@+id/textView28_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:text="S :"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/clock_image_widget"
+        app:layout_constraintLeft_toRightOf="@+id/clock_image_widget"
+        app:layout_constraintStart_toEndOf="@+id/clock_image_widget"
+        app:layout_constraintTop_toTopOf="@+id/clock_image_widget" />
 
-            <TextView
-                android:id="@+id/textView28_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="6dp"
-                android:text="S :"
-                android:textSize="14sp"
-                android:layout_toEndOf="@+id/clock_image_widget"
-                android:layout_below="@+id/med_dosage_widget"
-                android:layout_toRightOf="@+id/clock_image_widget" />
+    <TextView
+        android:id="@+id/start_date_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView28_widget"
+        app:layout_constraintLeft_toRightOf="@+id/textView28_widget"
+        app:layout_constraintStart_toEndOf="@+id/textView28_widget"
+        app:layout_constraintTop_toTopOf="@+id/textView28_widget"
+        tools:text="24" />
 
-            <TextView
-                android:id="@+id/start_date_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="5dp"
-                tools:text="24"
-                android:textSize="16sp"
-                android:layout_toEndOf="@+id/textView28_widget"
-                android:layout_below="@+id/med_dosage_widget"
-                android:layout_toRightOf="@+id/textView28_widget" />
+    <TextView
+        android:id="@+id/textView30_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:text="E :"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/start_date_widget"
+        app:layout_constraintLeft_toRightOf="@+id/start_date_widget"
+        app:layout_constraintStart_toEndOf="@+id/start_date_widget"
+        app:layout_constraintTop_toTopOf="@+id/start_date_widget"
+        app:layout_constraintVertical_bias="1.0" />
 
-            <TextView
-                android:id="@+id/textView30_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="6dp"
-                android:text="E :"
-                android:textSize="14sp"
-                android:layout_toEndOf="@+id/start_date_widget"
-                android:layout_below="@+id/med_dosage_widget"
-                android:layout_toRightOf="@+id/start_date_widget" />
+    <TextView
+        android:id="@+id/end_date_widget"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginRight="60dp"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView30_widget"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/textView30_widget"
+        app:layout_constraintStart_toEndOf="@+id/textView30_widget"
+        app:layout_constraintTop_toTopOf="@+id/textView30_widget"
+        tools:text="15" />
 
-            <TextView
-                android:id="@+id/end_date_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="2dp"
-                android:layout_marginStart="2dp"
-                android:layout_marginTop="5dp"
-                tools:text="15"
-                android:textSize="16sp"
-                android:layout_toEndOf="@+id/textView30_widget"
-                android:layout_below="@+id/med_dosage_widget"
-                android:layout_toRightOf="@+id/textView30_widget" />
-
-            <Button
-                android:id="@+id/taken_layout_widget"
-                android:layout_below="@+id/clock_image_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Taken"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="160dp"/>
-
-            <Button
-                android:id="@+id/ignore_layout_widget"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/taken_layout_widget"
-                android:layout_below="@+id/clock_image_widget"
-                android:text="Ignore"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/taken_layout_widget" />
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

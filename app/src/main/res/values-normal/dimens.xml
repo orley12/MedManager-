@@ -7,6 +7,6 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="date_text_size_on_card">11sp</dimen>
     <dimen name="date_value_size_on_card">12sp</dimen>
-    <dimen name="button_size_on_card">40dp</dimen>
+    <dimen name="button_size_on_card">@dimen/custom_wrap_content</dimen>
 
 </resources>

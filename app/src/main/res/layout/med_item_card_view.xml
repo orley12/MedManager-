@@ -1,165 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:focusable="true">
+    android:layout_height="160dp"
+    android:clickable="false"
+    android:focusable="false"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="4dp"
+    android:layout_marginBottom="8dp"
+    android:layout_marginTop="8dp"
+    tools:layout_editor_absoluteX="4dp"
+    tools:layout_editor_absoluteY="4dp">
 
-
-    <android.support.v7.widget.CardView
-        android:id="@+id/cardview"
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_margin="4dp"
-        android:clickable="false"
-        android:focusable="false"
-        app:cardCornerRadius="6dp"
-        app:cardElevation="4dp">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <ImageView
+            android:id="@+id/med_type_image_card"
+            android:layout_width="130dp"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="#000000" />
 
-            <ImageView
-                android:id="@+id/med_type_image_card"
-                android:layout_width="145dp"
-                android:layout_height="match_parent"
-                tools:background="#000000" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <ImageView
+            android:id="@+id/imageView5_card"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="4dp"
+            android:background="#c0c0c0"
+            app:layout_constraintBottom_toTopOf="@+id/ignore_layout_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/med_type_image_card"
+            app:layout_constraintTop_toBottomOf="@+id/clock_image_card"
+            app:layout_constraintVertical_bias="1.0" />
 
-                <TextView
-                    android:id="@+id/med_name_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:lines="1"
-                    tools:text="Penicillin"
-                    android:textSize="30sp"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/clock_image_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_duration"
+            app:layout_constraintStart_toStartOf="@+id/textView26"
+            app:layout_constraintTop_toBottomOf="@+id/textView26" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+        <TextView
+            android:id="@+id/med_name_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:lines="1"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/med_type_image_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/med_type_image_card"
+            app:layout_constraintTop_toTopOf="@+id/med_type_image_card"
+            app:layout_constraintVertical_bias="0.0"
+            tools:text="Penicillin" />
 
-                    <TextView
-                        android:id="@+id/textView26"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:text="@string/card_dosage_field"
-                        android:textSize="20sp" />
 
-                    <TextView
-                        android:id="@+id/med_dosage_card"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:text="2"
-                        android:textSize="24sp" />
+        <TextView
+            android:id="@+id/textView26"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/card_dosage_field"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/med_name_card"
+            app:layout_constraintTop_toBottomOf="@+id/med_name_card" />
 
-                </LinearLayout>
+        <TextView
+            android:id="@+id/med_dosage_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:text="2"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView26"
+            app:layout_constraintStart_toEndOf="@+id/textView26"
+            app:layout_constraintTop_toTopOf="@+id/textView26"
+            app:layout_constraintVertical_bias="1.0" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+        <TextView
+            android:id="@+id/end_date_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="15"
+            android:textSize="@dimen/date_value_size_on_card"
+            app:layout_constraintBottom_toBottomOf="@+id/textView28"
+            app:layout_constraintStart_toEndOf="@+id/textView28"
+            app:layout_constraintTop_toTopOf="@+id/textView28" />
 
-                    <ImageView
-                        android:id="@+id/clock_image_card"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginTop="8dp"
-                        android:src="@drawable/ic_duration"/>
+        <TextView
+            android:id="@+id/textView28"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="S :"
+            android:textSize="@dimen/date_text_size_on_card"
+            app:layout_constraintBottom_toBottomOf="@+id/clock_image_card"
+            app:layout_constraintStart_toEndOf="@+id/clock_image_card"
+            app:layout_constraintTop_toTopOf="@+id/clock_image_card" />
 
-                    <TextView
-                        android:id="@+id/textView28"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_marginLeft="12dp"
-                        android:layout_marginTop="6dp"
-                        android:text="S :"
-                        android:textSize="@dimen/date_text_size_on_card" />
+        <TextView
+            android:id="@+id/textView30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:text="E :"
+            android:textSize="@dimen/date_text_size_on_card"
+            app:layout_constraintBottom_toBottomOf="@+id/end_date_card"
+            app:layout_constraintStart_toEndOf="@+id/end_date_card"
+            app:layout_constraintTop_toTopOf="@+id/end_date_card" />
 
-                    <TextView
-                        android:id="@+id/start_date_card"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="6dp"
-                        android:text="24"
-                        android:textSize="@dimen/date_value_size_on_card" />
+        <TextView
+            android:id="@+id/start_date_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginRight="60dp"
+            android:text="24"
+            android:textSize="@dimen/date_value_size_on_card"
+            app:layout_constraintBottom_toBottomOf="@+id/textView30"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.074"
+            app:layout_constraintStart_toEndOf="@+id/textView30"
+            app:layout_constraintTop_toTopOf="@+id/textView30" />
 
-                    <TextView
-                        android:id="@+id/textView30"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="6dp"
-                        android:text="E :"
-                        android:textSize="@dimen/date_text_size_on_card" />
+        <com.example.android.med_manager.customViews.IgnoreButton
+            android:id="@+id/ignore_layout_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Ignore"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/med_type_image_card"
+            app:layout_constraintTop_toBottomOf="@+id/clock_image_card"
+            app:layout_constraintVertical_bias="1.0" />
 
-                    <TextView
-                        android:id="@+id/end_date_card"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
-                        android:layout_marginStart="2dp"
-                        android:layout_marginTop="6dp"
-                        android:text="15"
-                        android:textSize="@dimen/date_value_size_on_card" />
-                </LinearLayout>
+        <com.example.android.med_manager.customViews.TakenButton
+            android:id="@+id/taken_layout_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:text="Taken"
+            app:layout_constraintBottom_toBottomOf="@+id/ignore_layout_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ignore_layout_card"
+            app:layout_constraintTop_toTopOf="@+id/ignore_layout_card" />
 
-                <ImageView
-                    android:id="@+id/imageView5_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#c0c0c0"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginLeft="15dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                    <com.example.android.med_manager.customViews.TakenButton
-                        android:id="@+id/taken_layout_card"
-                        android:layout_marginLeft="20dp"
-                        android:layout_width="@dimen/button_size_on_card"
-                        android:layout_height="wrap_content"
-                        android:text="Taken"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_marginTop="10dp" />
-
-                    <com.example.android.med_manager.customViews.IgnoreButton
-                        android:id="@+id/ignore_layout_card"
-                        android:layout_width="@dimen/button_size_on_card"
-                        android:layout_height="wrap_content"
-                        android:text="Ignore"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:layout_marginTop="10dp" />
-                </LinearLayout>
-
-        </LinearLayout>
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>
-</LinearLayout>
